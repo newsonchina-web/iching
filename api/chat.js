@@ -21,7 +21,7 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 model: "glm-4-flash", 
                 messages: messages,
-                temperature: 0.4 // 调低温度确保格式正确，同时兼顾易理发挥
+                temperature: 0.6 // 使用文本块解析，可以稍微放开温度，让推演更有文采
             })
         });
 
