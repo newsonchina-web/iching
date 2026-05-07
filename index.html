@@ -9,13 +9,12 @@
             --bg: #f5f1e7;
             --text-main: #3e3832;
             --text-light: #8a7f74;
-            --accent: #8e291c; /* 故宫红 */
+            --accent: #8e291c;
             --border: #d4cbb8;
         }
         body {
             font-family: "Noto Serif SC", STSong, "Source Han Serif SC", "Times New Roman", serif;
             background-color: var(--bg);
-            /* 细微的宣纸纹理 */
             background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.05"/></svg>');
             color: var(--text-main);
             margin: 0;
@@ -37,7 +36,6 @@
             box-sizing: border-box;
             position: relative;
         }
-        /* 内嵌双边框，增加古籍感 */
         .container::before {
             content: '';
             position: absolute;
@@ -186,7 +184,6 @@
             return;
         }
 
-        // 隐藏之前的结果，展示 Loading
         document.getElementById('result-panel').style.display = 'none';
         document.getElementById('loading-indicator').style.display = 'block';
 
@@ -215,7 +212,6 @@
             const responseBox = document.getElementById('ai-response');
 
             if (response.ok) {
-                // 将 Markdown 换行转换为优美的段落
                 let text = data.choices[0].message.content;
                 text = text.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
                 responseBox.innerHTML = text;
@@ -229,6 +225,5 @@
         }
     }
 </script>
-
 </body>
 </html>

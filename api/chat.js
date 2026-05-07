@@ -4,47 +4,51 @@ export default async function handler(req, res) {
 
     try {
         const { messages } = req.body;
-        // 关键修复：加入 .trim() 防止环境变量末尾不小心多复制了空格导致验证失败
         const API_KEY = process.env.GEMINI_API_KEY?.trim();
         
         if (!API_KEY) {
-            return res.status(500).json({ error: { message: '环境变量 GEMINI_API_KEY 未配置' } });
+            return res.status(500).json({ error: { message: '环境变量 GEMINI_API_KEY 未配置。' } });
         }
 
         const sysMsg = messages.find(m => m.role === 'system')?.content || "";
         const usrMsg = messages.find(m => m.role === 'user')?.content || "";
 
-        // 关键修复：改用 gemini-1.5-flash-latest，防止某些老节点找不到基础名称
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
+        // 终极杀手锏：建立动态尝试列表。谷歌API名字老变，我们把常用的名字全试一遍。
+        // gemini-2.0-flash 是当前最新最稳的，其次降级到 1.5 系列。
+        const modelsToTry = ["gemini-2.0-flash", "gemini-1.5-flash"];
+        let lastError = "";
 
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                systemInstruction: { parts: [{ text: sysMsg }] },
-                contents: [{ role: "user", parts: [{ text: usrMsg }] }],
-                generationConfig: { 
-                    temperature: 0.75
-                }
-            })
-        });
+        for (const model of modelsToTry) {
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`;
+            
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    systemInstruction: { parts: [{ text: sysMsg }] },
+                    contents: [{ role: "user", parts: [{ text: usrMsg }] }],
+                    generationConfig: { temperature: 0.75 }
+                })
+            });
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if (!response.ok) {
-            const errorText = data.error?.message || JSON.stringify(data);
-            return res.status(response.status).json({ error: { message: `大模型拒绝访问: ${errorText}` } });
+            // 如果成功，立刻返回给前端
+            if (response.ok && data.candidates && data.candidates[0].content) {
+                const reply = data.candidates[0].content.parts[0].text;
+                return res.status(200).json({ choices: [{ message: { content: reply } }] });
+            } else {
+                lastError = data.error?.message || JSON.stringify(data);
+                console.log(`Model ${model} failed:`, lastError);
+                // 失败了不报错，继续循环尝试下一个模型！
+            }
         }
 
-        if (data.candidates && data.candidates[0].content) {
-            const reply = data.candidates[0].content.parts[0].text;
-            return res.status(200).json({ choices: [{ message: { content: reply } }] });
-        } else {
-            throw new Error("大模型未返回有效文本");
-        }
+        // 如果全部失败，把最后的错误抛出来
+        return res.status(500).json({ error: { message: `谷歌接口拒绝访问: ${lastError}` } });
 
     } catch (error) {
         console.error("Vercel Error:", error);
-        return res.status(500).json({ error: { message: '中转站执行异常', details: error.message } });
+        return res.status(500).json({ error: { message: '后端中转崩溃', details: error.message } });
     }
 }
