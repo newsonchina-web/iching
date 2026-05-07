@@ -13,8 +13,8 @@ export default async function handler(req, res) {
         const sysMsg = messages.find(m => m.role === 'system')?.content || "";
         const usrMsg = messages.find(m => m.role === 'user')?.content || "";
 
-        // The ONLY reliable model name for this endpoint
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+        // 核心修复：gemini-1.5-flash 已被谷歌彻底停用！我们直接调用最新的 gemini-2.0-flash
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
             
         const response = await fetch(API_URL, {
             method: 'POST',
