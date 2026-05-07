@@ -9,7 +9,7 @@
             --bg: #f5f1e7;
             --text-main: #2b2723;
             --text-light: #70665c;
-            --accent: #8e291c; /* 故宫红 */
+            --accent: #8e291c;
             --border: #d4cbb8;
             --card-bg: rgba(255, 255, 255, 0.7);
         }
@@ -99,6 +99,17 @@
             background: var(--accent);
             transform: translateY(-1px);
         }
+        
+        .status-msg {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            display: none;
+            line-height: 1.6;
+        }
+        .status-loading { color: var(--text-light); font-style: italic; letter-spacing: 2px; }
+        .status-error { color: var(--accent); font-weight: bold; background: rgba(142, 41, 28, 0.1); padding: 10px; border-radius: 4px; }
+
         .result-panel {
             margin-top: 40px;
             display: none;
@@ -109,31 +120,11 @@
             to { opacity: 1; transform: translateY(0); } 
         }
         
-        /* 卦象展示区 */
-        .hexagram-visual {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .hex-symbol {
-            font-size: 80px; /* 巨大的卦符 */
-            line-height: 1;
-            color: var(--text-main);
-            margin-bottom: 10px;
-            font-family: "Segoe UI Symbol", "Apple Symbols", serif; /* 确保卦符显示 */
-        }
-        .hex-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--accent);
-            letter-spacing: 2px;
-            margin-bottom: 5px;
-        }
-        .hex-line {
-            font-size: 14px;
-            color: var(--text-light);
-        }
+        .hexagram-visual { text-align: center; margin-bottom: 30px; }
+        .hex-symbol { font-size: 80px; line-height: 1; color: var(--text-main); margin-bottom: 10px; font-family: "Segoe UI Symbol", "Apple Symbols", serif; }
+        .hex-title { font-size: 24px; font-weight: bold; color: var(--accent); letter-spacing: 2px; margin-bottom: 5px; }
+        .hex-line { font-size: 14px; color: var(--text-light); }
 
-        /* 文本解析卡片 */
         .content-card {
             background: rgba(255,255,255,0.8);
             border: 1px solid var(--border);
@@ -152,39 +143,10 @@
             color: var(--accent);
             border: 1px solid var(--border);
         }
-        .classic-text {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--text-main);
-            margin-top: 10px;
-            margin-bottom: 8px;
-        }
-        .classic-desc {
-            font-size: 15px;
-            color: var(--text-light);
-            line-height: 1.6;
-            text-align: justify;
-        }
-        .strategy-text {
-            font-size: 16px;
-            color: var(--text-main);
-            line-height: 1.8;
-            text-align: justify;
-            margin-top: 10px;
-        }
-        .strategy-text p {
-            margin-bottom: 1em;
-        }
-
-        .loading {
-            text-align: center;
-            color: var(--text-light);
-            font-style: italic;
-            margin-top: 30px;
-            font-size: 14px;
-            display: none;
-            letter-spacing: 2px;
-        }
+        .classic-text { font-size: 18px; font-weight: bold; color: var(--text-main); margin-top: 10px; margin-bottom: 8px; }
+        .classic-desc { font-size: 15px; color: var(--text-light); line-height: 1.6; text-align: justify; }
+        .strategy-text { font-size: 16px; color: var(--text-main); line-height: 1.8; text-align: justify; margin-top: 10px; }
+        .strategy-text p { margin-bottom: 1em; }
     </style>
 </head>
 <body>
@@ -196,31 +158,27 @@
     <input type="text" id="user-question" class="input-box" placeholder="请输入当下的决策困局..." autocomplete="off">
     <button class="btn" onclick="castAndAnalyze()">诚心起卦</button>
 
-    <div id="loading-indicator" class="loading">易理验算中，正在调取先贤智慧...</div>
+    <div id="status-box" class="status-msg"></div>
 
     <div id="result-panel" class="result-panel">
-        <!-- 视觉卦象区 -->
         <div class="hexagram-visual">
             <div class="hex-symbol" id="hex-symbol">䷀</div>
             <div class="hex-title" id="hex-title">【乾为天】</div>
             <div class="hex-line" id="hex-line">变爻：第 1 爻</div>
         </div>
 
-        <!-- 卦辞区 -->
         <div class="content-card">
             <div class="card-label">判大局 · 卦辞</div>
             <div class="classic-text" id="gua-ci"></div>
             <div class="classic-desc" id="gua-ci-desc"></div>
         </div>
 
-        <!-- 爻辞区 -->
         <div class="content-card">
             <div class="card-label">观变数 · 爻辞</div>
             <div class="classic-text" id="yao-ci"></div>
             <div class="classic-desc" id="yao-ci-desc"></div>
         </div>
 
-        <!-- 战略智库区 -->
         <div class="content-card" style="border-color: var(--accent);">
             <div class="card-label" style="background: var(--accent); color: #fff; border:none;">智库 · 现实解码</div>
             <div class="strategy-text" id="strategy-content"></div>
@@ -229,7 +187,6 @@
 </div>
 
 <script>
-    // 周文王64卦顺序（完美对应 Unicode 0x4DC0 开始的顺序）
     const hexagrams = [
         "乾为天", "坤为地", "水雷屯", "山水蒙", "水天需", "天水讼", "地水师", "水地比",
         "风天小畜", "天泽履", "地天泰", "天地否", "天火同人", "火天大有", "地山谦", "雷地豫",
@@ -241,22 +198,26 @@
         "巽为风", "兑为泽", "风水涣", "水泽节", "风泽中孚", "雷山小过", "水火既济", "火水未济"
     ];
 
+    function showStatus(msg, isError = false) {
+        const box = document.getElementById('status-box');
+        box.style.display = 'block';
+        box.className = isError ? 'status-msg status-error' : 'status-msg status-loading';
+        box.innerHTML = msg;
+    }
+
     async function castAndAnalyze() {
         const question = document.getElementById('user-question').value;
         if (!question.trim()) {
-            alert("请先输入您的问题，方能感应气场。");
+            showStatus("心诚则灵，请先在上方输入您的困局或问题。", true);
             return;
         }
 
         document.getElementById('result-panel').style.display = 'none';
-        document.getElementById('loading-indicator').style.display = 'block';
+        showStatus("易理验算中，正在调取先贤智慧，请稍候...");
 
-        // 随机生成卦象和爻位
         const index = Math.floor(Math.random() * 64);
         const name = hexagrams[index];
         const line = Math.floor(Math.random() * 6) + 1;
-        
-        // 自动计算并生成对应的古卦符 (Unicode 魔法)
         const symbol = String.fromCodePoint(0x4DC0 + index);
 
         try {
@@ -267,12 +228,12 @@
                     messages: [
                         { 
                             role: "system", 
-                            content: "你是一位精通《易经》的国学大师与战略智库。请严格输出一段合法的 JSON 格式数据，不要包含任何 Markdown 代码块包裹（不要输出 ```json）。JSON 必须精确包含以下5个字段：
-1. "gua_ci": "该卦准确的卦辞原文"
-2. "gua_ci_desc": "卦辞的白话翻译与易理精要"
-3. "yao_ci": "该变爻准确的爻辞原文"
-4. "yao_ci_desc": "爻辞的白话翻译与易理精要"
-5. "strategy": "结合用户提出的现实问题，给出的现代战略推演和破局建议(请使用 <p> 标签分段)""
+                            content: `你是一位精通《易经》的国学大师与战略智库。请严格输出一段合法的 JSON 格式数据。JSON 必须包含以下5个字段：
+1. "gua_ci": "该卦的卦辞原文"
+2. "gua_ci_desc": "卦辞的白话翻译"
+3. "yao_ci": "该变爻的爻辞原文"
+4. "yao_ci_desc": "爻辞的白话翻译"
+5. "strategy": "结合用户问题的现代战略推演(使用<p>分段)"`
                         },
                         { role: "user", content: `卦象：【${name}】，变爻：第 ${line} 爻。现实问题：${question}` }
                     ]
@@ -281,38 +242,41 @@
 
             const data = await response.json();
             
-            if (response.ok) {
-                // 解析返回的 JSON (增加鲁棒性，处理大模型可能带有的 Markdown 代码块)
-                let rawText = data.choices[0].message.content.trim();
-                if (rawText.startsWith('```')) {
-                    rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
-                }
-                
-                const result = JSON.parse(rawText);
-
-                // 填充 UI 数据
-                document.getElementById('hex-symbol').innerText = symbol;
-                document.getElementById('hex-title').innerText = `【${name}】`;
-                document.getElementById('hex-line').innerText = `变爻：第 ${line} 爻`;
-
-                document.getElementById('gua-ci').innerText = result.gua_ci;
-                document.getElementById('gua-ci-desc').innerText = result.gua_ci_desc;
-                
-                document.getElementById('yao-ci').innerText = result.yao_ci;
-                document.getElementById('yao-ci-desc').innerText = result.yao_ci_desc;
-
-                document.getElementById('strategy-content').innerHTML = result.strategy;
-
-                // 切换展示
-                document.getElementById('loading-indicator').style.display = 'none';
-                document.getElementById('result-panel').style.display = 'block';
-
-            } else {
-                throw new Error(data.error?.message || "接口访问异常");
+            if (!response.ok) {
+                throw new Error(data.error?.message || "后端接口访问异常");
             }
+
+            let rawText = data.choices[0].message.content;
+            let jsonString = "";
+            
+            const startIndex = rawText.indexOf('{');
+            const endIndex = rawText.lastIndexOf('}');
+            
+            if (startIndex !== -1 && endIndex !== -1 && endIndex >= startIndex) {
+                jsonString = rawText.substring(startIndex, endIndex + 1);
+            } else {
+                throw new Error("大模型未能返回有效的数据格式。");
+            }
+
+            const result = JSON.parse(jsonString);
+
+            // 填充 UI
+            document.getElementById('hex-symbol').innerText = symbol;
+            document.getElementById('hex-title').innerText = `【${name}】`;
+            document.getElementById('hex-line').innerText = `变爻：第 ${line} 爻`;
+
+            document.getElementById('gua-ci').innerText = result.gua_ci || "暂无";
+            document.getElementById('gua-ci-desc').innerText = result.gua_ci_desc || "暂无";
+            document.getElementById('yao-ci').innerText = result.yao_ci || "暂无";
+            document.getElementById('yao-ci-desc').innerText = result.yao_ci_desc || "暂无";
+            document.getElementById('strategy-content').innerHTML = result.strategy || "暂无";
+
+            document.getElementById('status-box').style.display = 'none';
+            document.getElementById('result-panel').style.display = 'block';
+
         } catch (e) {
-            document.getElementById('loading-indicator').style.display = 'none';
-            alert(`推演失败，请重试。错误信息: ${e.message}`);
+            console.error(e);
+            showStatus(`推演中断。<br>原因：${e.message}<br>请确保后台API Key配置正确。`, true);
         }
     }
 </script>
