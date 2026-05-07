@@ -7,7 +7,7 @@ export default async function handler(req, res) {
         const API_KEY = process.env.ZHIPU_API_KEY?.trim();
         
         if (!API_KEY) {
-            return res.status(500).json({ error: { message: '服务器未配置 ZHIPU_API_KEY，请在 Vercel 后台添加。' } });
+            return res.status(500).json({ error: { message: '服务器未配置 ZHIPU_API_KEY。' } });
         }
 
         const API_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 model: "glm-4-flash", 
                 messages: messages,
-                temperature: 0.5
+                temperature: 0.4 // 调低温度确保格式正确，同时兼顾易理发挥
             })
         });
 
@@ -31,10 +31,10 @@ export default async function handler(req, res) {
             return res.status(200).json({ choices: [{ message: { content: data.choices[0].message.content } }] });
         } else {
             const errorMsg = data.error?.message || JSON.stringify(data);
-            return res.status(500).json({ error: { message: `智谱接口报错: ${errorMsg}` } });
+            return res.status(500).json({ error: { message: `智谱中枢报错: ${errorMsg}` } });
         }
 
     } catch (error) {
-        return res.status(500).json({ error: { message: 'Vercel 云端中转站崩溃', details: error.message } });
+        return res.status(500).json({ error: { message: '云端算力网络崩溃', details: error.message } });
     }
 }
