@@ -4,40 +4,39 @@ export default async function handler(req, res) {
 
     try {
         const { messages } = req.body;
-        const API_KEY = process.env.GEMINI_API_KEY?.trim();
+        // 配置智谱 API Key，建议在 Vercel 环境变量中设置 ZHIPU_API_KEY
+        const API_KEY = process.env.ZHIPU_API_KEY?.trim();
         
         if (!API_KEY) {
-            return res.status(500).json({ error: { message: '环境变量 GEMINI_API_KEY 未配置。' } });
+            return res.status(500).json({ error: { message: '环境变量 ZHIPU_API_KEY 未配置。' } });
         }
 
-        const sysMsg = messages.find(m => m.role === 'system')?.content || "";
-        const usrMsg = messages.find(m => m.role === 'user')?.content || "";
-
-        // 核心修复：gemini-1.5-flash 已被谷歌彻底停用！我们直接调用最新的 gemini-2.0-flash
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+        const API_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
             
         const response = await fetch(API_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${API_KEY}`
+            },
             body: JSON.stringify({
-                systemInstruction: { parts: [{ text: sysMsg }] },
-                contents: [{ role: "user", parts: [{ text: usrMsg }] }],
-                generationConfig: { temperature: 0.75 }
+                model: "glm-4-flash", 
+                messages: messages,
+                temperature: 0.7
             })
         });
 
         const data = await response.json();
 
-        if (response.ok && data.candidates && data.candidates[0].content) {
-            const reply = data.candidates[0].content.parts[0].text;
-            return res.status(200).json({ choices: [{ message: { content: reply } }] });
+        if (response.ok && data.choices && data.choices.length > 0) {
+            return res.status(200).json({ choices: [{ message: { content: data.choices[0].message.content } }] });
         } else {
             const errorMsg = data.error?.message || JSON.stringify(data);
-            return res.status(500).json({ error: { message: `谷歌接口拒绝访问: ${errorMsg}` } });
+            return res.status(500).json({ error: { message: `智谱算力接口异常: ${errorMsg}` } });
         }
 
     } catch (error) {
         console.error("Vercel Error:", error);
-        return res.status(500).json({ error: { message: '后端中转崩溃', details: error.message } });
+        return res.status(500).json({ error: { message: '后端节点崩溃', details: error.message } });
     }
 }

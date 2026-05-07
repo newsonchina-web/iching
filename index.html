@@ -9,7 +9,7 @@
             --bg: #f5f1e7;
             --text-main: #3e3832;
             --text-light: #8a7f74;
-            --accent: #8e291c;
+            --accent: #8e291c; /* 故宫红 */
             --border: #d4cbb8;
         }
         body {
@@ -154,7 +154,7 @@
     <input type="text" id="user-question" class="input-box" placeholder="请输入当下的决策困局..." autocomplete="off">
     <button class="btn" onclick="castAndAnalyze()">静心起卦</button>
 
-    <div id="loading-indicator" class="loading">高维算力推演中，请稍候...</div>
+    <div id="loading-indicator" class="loading">正在接入智库算力进行深度推演...</div>
 
     <div id="result-panel" class="result-panel">
         <div class="hexagram-header">
@@ -196,7 +196,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     messages: [
-                        { role: "system", content: "你是一位精通《易经》的现代战略分析师。请结合用户摇出的卦象、爻位和他们的现实困境，给出极具深度、客观且富有洞察力的战略建议。语气需冷静、专业。排版要清晰，分段论述。" },
+                        { role: "system", content: "你是一位精通《易经》的现代战略分析师。请结合用户摇出的卦象、爻位和现实困境，给出深邃、客观且富有洞察力的战略建议。语气需冷静、专业，排版清晰，分段论述。" },
                         { role: "user", content: `卦象：【${name}】，变爻：第 ${line} 爻。问题：${question}` }
                     ]
                 })
@@ -213,15 +213,16 @@
 
             if (response.ok) {
                 let text = data.choices[0].message.content;
+                // 处理换行符，使其更符合中文排版
                 text = text.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
                 responseBox.innerHTML = text;
             } else {
-                responseBox.innerHTML = `<p style="color:var(--accent); text-align:center;">推演中断：<br>${data.error?.message || "未知网络异常"}</p>`;
+                responseBox.innerHTML = `<p style="color:var(--accent); text-align:center;">推演中断：<br>${data.error?.message || "接口访问异常"}</p>`;
             }
         } catch (e) {
             document.getElementById('loading-indicator').style.display = 'none';
             document.getElementById('result-panel').style.display = 'block';
-            document.getElementById('ai-response').innerHTML = `<p style="color:var(--accent); text-align:center;">连接中断。请检查网络或部署状态。</p>`;
+            document.getElementById('ai-response').innerHTML = `<p style="color:var(--accent); text-align:center;">连接中断。请检查云端部署状态。</p>`;
         }
     }
 </script>
