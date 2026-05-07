@@ -4,7 +4,8 @@ export default async function handler(req, res) {
 
     try {
         const { messages } = req.body;
-        const API_KEY = process.env.GEMINI_API_KEY;
+        // 关键修复：加入 .trim() 防止环境变量末尾不小心多复制了空格导致验证失败
+        const API_KEY = process.env.GEMINI_API_KEY?.trim();
         
         if (!API_KEY) {
             return res.status(500).json({ error: { message: '环境变量 GEMINI_API_KEY 未配置' } });
@@ -13,8 +14,8 @@ export default async function handler(req, res) {
         const sysMsg = messages.find(m => m.role === 'system')?.content || "";
         const usrMsg = messages.find(m => m.role === 'user')?.content || "";
 
-        // 谷歌原生 API 端点
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+        // 关键修复：改用 gemini-1.5-flash-latest，防止某些老节点找不到基础名称
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
 
         const response = await fetch(API_URL, {
             method: 'POST',
@@ -23,8 +24,7 @@ export default async function handler(req, res) {
                 systemInstruction: { parts: [{ text: sysMsg }] },
                 contents: [{ role: "user", parts: [{ text: usrMsg }] }],
                 generationConfig: { 
-                    temperature: 0.7,
-                    maxOutputTokens: 1000 
+                    temperature: 0.75
                 }
             })
         });
@@ -33,21 +33,18 @@ export default async function handler(req, res) {
 
         if (!response.ok) {
             const errorText = data.error?.message || JSON.stringify(data);
-            return res.status(response.status).json({ error: { message: `Gemini API 错误: ${errorText}` } });
+            return res.status(response.status).json({ error: { message: `大模型拒绝访问: ${errorText}` } });
         }
 
-        // 解析谷歌原生响应并包装成前端兼容格式
         if (data.candidates && data.candidates[0].content) {
             const reply = data.candidates[0].content.parts[0].text;
-            return res.status(200).json({
-                choices: [{ message: { content: reply } }]
-            });
+            return res.status(200).json({ choices: [{ message: { content: reply } }] });
         } else {
-            throw new Error("模型未返回有效内容");
+            throw new Error("大模型未返回有效文本");
         }
 
     } catch (error) {
-        console.error("Vercel Function Error:", error);
-        return res.status(500).json({ error: { message: '后端中转异常', details: error.message } });
+        console.error("Vercel Error:", error);
+        return res.status(500).json({ error: { message: '中转站执行异常', details: error.message } });
     }
 }
