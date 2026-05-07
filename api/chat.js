@@ -1,58 +1,53 @@
 export default async function handler(req, res) {
-    // 允许跨域请求或预检请求
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method Not Allowed' });
-    }
+    if (req.method === 'OPTIONS') return res.status(200).end();
+    if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' });
 
     try {
-        // Vercel 会自动解析 JSON body
-        const requestBody = req.body;
+        const { messages } = req.body;
+        const API_KEY = process.env.GEMINI_API_KEY;
         
-        const geminiKey = process.env.GEMINI_API_KEY;
-        const deepseekKey = process.env.DEEPSEEK_API_KEY;
-        
-        let API_KEY = geminiKey;
-        let API_URL = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
-        let modelName = "gemini-1.5-flash";
-        
-        if (!geminiKey && deepseekKey) {
-            API_KEY = deepseekKey;
-            API_URL = "https://api.deepseek.com/v1/chat/completions";
-            modelName = "deepseek-chat";
+        if (!API_KEY) {
+            return res.status(500).json({ error: { message: '环境变量 GEMINI_API_KEY 未配置' } });
         }
 
-        if (!API_KEY) {
-            return res.status(500).json({ 
-                error: { message: '服务器未配置 API 密钥。请在 Vercel 环境变量中添加 GEMINI_API_KEY。' } 
-            });
-        }
+        const sysMsg = messages.find(m => m.role === 'system')?.content || "";
+        const usrMsg = messages.find(m => m.role === 'user')?.content || "";
+
+        // 谷歌原生 API 端点
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
         const response = await fetch(API_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${API_KEY}`
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                model: modelName,
-                messages: requestBody.messages,
-                temperature: 0.75
+                systemInstruction: { parts: [{ text: sysMsg }] },
+                contents: [{ role: "user", parts: [{ text: usrMsg }] }],
+                generationConfig: { 
+                    temperature: 0.7,
+                    maxOutputTokens: 1000 
+                }
             })
         });
 
         const data = await response.json();
 
         if (!response.ok) {
-            return res.status(response.status).json(data);
+            const errorText = data.error?.message || JSON.stringify(data);
+            return res.status(response.status).json({ error: { message: `Gemini API 错误: ${errorText}` } });
         }
 
-        return res.status(200).json(data);
+        // 解析谷歌原生响应并包装成前端兼容格式
+        if (data.candidates && data.candidates[0].content) {
+            const reply = data.candidates[0].content.parts[0].text;
+            return res.status(200).json({
+                choices: [{ message: { content: reply } }]
+            });
+        } else {
+            throw new Error("模型未返回有效内容");
+        }
 
     } catch (error) {
-        console.error('API Error:', error);
-        return res.status(500).json({ error: { message: '云端中转站异常' }, details: error.message });
+        console.error("Vercel Function Error:", error);
+        return res.status(500).json({ error: { message: '后端中转异常', details: error.message } });
     }
 }

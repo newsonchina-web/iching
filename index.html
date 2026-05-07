@@ -3,121 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>数字易经智库</title>
+    <title>数字易经战略智库</title>
     <style>
-        body { font-family: 'PingFang SC', 'Microsoft YaHei', serif; background-color: #f5f5f5; color: #333; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .container { max-width: 600px; width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; box-sizing: border-box; }
-        h1 { color: #2c3e50; font-size: 24px; }
-        p.subtitle { color: #7f8c8d; font-size: 14px; margin-bottom: 30px; }
-        button { background-color: #34495e; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; cursor: pointer; margin-top: 20px; transition: 0.3s; width: 100%; max-width: 250px; }
-        button:hover { background-color: #2c3e50; }
-        input[type="text"] { width: 100%; padding: 12px; margin-top: 30px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
-        .result-box { margin-top: 20px; padding: 15px; background: #ecf0f1; border-radius: 6px; font-size: 20px; font-weight: bold; color: #2980b9; display: none; }
-        .ai-response { margin-top: 30px; padding: 20px; background: #fdfbf7; border-left: 4px solid #34495e; text-align: justify; line-height: 1.8; display: none; font-size: 15px; }
+        :root {
+            --bg-color: #fdfaf6;
+            --main-color: #2c3e50;
+            --accent-color: #8e44ad;
+            --text-color: #34495e;
+            --border-color: #dcdde1;
+        }
+        body {
+            font-family: 'Optima', 'PingFang SC', 'Source Han Serif SC', serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .app-container {
+            max-width: 500px;
+            width: 90%;
+            background: white;
+            padding: 40px;
+            border-radius: 2px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            position: relative;
+        }
+        .app-container::before {
+            content: "";
+            position: absolute;
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 1px solid #f0f0f0;
+            pointer-events: none;
+        }
+        h1 {
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: var(--main-color);
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        .tagline {
+            font-size: 12px;
+            color: #95a5a6;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+        }
+        .input-group {
+            margin-bottom: 30px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 15px 0;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            background: transparent;
+            font-size: 16px;
+            outline: none;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            border-bottom-color: var(--main-color);
+        }
+        .action-btn {
+            background: var(--main-color);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 14px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px 5px;
+        }
+        .action-btn:hover {
+            background: #1a252f;
+            transform: translateY(-2px);
+        }
+        .action-btn.secondary {
+            background: transparent;
+            color: var(--main-color);
+            border: 1px solid var(--main-color);
+        }
+        #result-display {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            display: none;
+            border-radius: 4px;
+        }
+        .gua-name {
+            font-size: 28px;
+            color: var(--main-color);
+            margin-bottom: 5px;
+        }
+        .gua-line {
+            font-size: 14px;
+            color: var(--accent-color);
+        }
+        #ai-response {
+            margin-top: 40px;
+            text-align: left;
+            line-height: 1.8;
+            font-size: 15px;
+            color: #2c3e50;
+            display: none;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .loading {
+            color: #95a5a6;
+            font-style: italic;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
-    <div class="container" id="welcome-screen">
-        <h1>数字易经战略智库</h1>
-        <p class="subtitle">东方哲学与高维算力的交汇</p>
-        <button onclick="enterSystem()">进入系统</button>
+
+<div class="app-container" id="app">
+    <h1>数字易经智库</h1>
+    <p class="tagline">Digital I-Ching Strategic Studio</p>
+
+    <div id="setup-section">
+        <div class="input-group">
+            <input type="text" id="user-question" placeholder="在此输入您当下的决策困局...">
+        </div>
+        <button class="action-btn" onclick="castAndAnalyze()">感应起卦并解码</button>
     </div>
 
-    <div class="container" id="main-interface" style="display: none;">
-        <h1>心诚则灵</h1>
-        <button onclick="randomCast()">静心感应起卦</button>
-        <div id="gua-result" class="result-box"></div>
-        
-        <input type="text" id="user-question" placeholder="请输入您当下的困局或核心问题...">
-        <button onclick="decodeStrategy()" style="background-color: #2980b9;">战略解码</button>
-        
-        <div id="ai-response" class="ai-response"></div>
+    <div id="result-display">
+        <div class="gua-name" id="gua-name">--</div>
+        <div class="gua-line" id="gua-line">--</div>
     </div>
 
-    <script>
-        const hexagramNames = [
-            "乾为天", "坤为地", "水雷屯", "山水蒙", "水天需", "天水讼", "地水师", "水地比",
-            "风天小畜", "天泽履", "地天泰", "天地否", "天火同人", "火天大有", "地山谦", "雷地豫",
-            "泽雷随", "山风蛊", "地泽临", "风地观", "火雷噬嗑", "山火贲", "山地剥", "地雷复",
-            "天雷无妄", "山天大畜", "山雷颐", "泽风大过", "坎为水", "离为火", "泽山咸", "雷风恒",
-            "天山遁", "雷天大壮", "火地晋", "地火明夷", "风火家人", "火泽睽", "水山蹇", "雷水解",
-            "山泽损", "风雷益", "泽天夬", "天风姤", "泽地萃", "地风升", "泽水困", "水风井",
-            "泽火革", "火风鼎", "震为雷", "艮为山", "风山渐", "雷泽归妹", "雷火丰", "火山旅",
-            "巽为风", "兑为泽", "风水涣", "水泽节", "风泽中孚", "雷山小过", "水火既济", "火水未济"
-        ];
+    <div id="ai-response"></div>
+</div>
 
-        function enterSystem() {
-            document.getElementById('welcome-screen').style.display = 'none';
-            document.getElementById('main-interface').style.display = 'block';
+<script>
+    const hexagrams = [
+        "乾为天", "坤为地", "水雷屯", "山水蒙", "水天需", "天水讼", "地水师", "水地比",
+        "风天小畜", "天泽履", "地天泰", "天地否", "天火同人", "火天大有", "地山谦", "雷地豫",
+        "泽雷随", "山风蛊", "地泽临", "风地观", "火雷噬嗑", "山火贲", "山地剥", "地雷复",
+        "天雷无妄", "山天大畜", "山雷颐", "泽风大过", "坎为水", "离为火", "泽山咸", "雷风恒",
+        "天山遁", "雷天大壮", "火地晋", "地火明夷", "风火家人", "火泽睽", "水山蹇", "雷水解",
+        "山泽损", "风雷益", "泽天夬", "天风姤", "泽地萃", "地风升", "泽水困", "水风井",
+        "泽火革", "火风鼎", "震为雷", "艮为山", "风山渐", "雷泽归妹", "雷火丰", "火山旅",
+        "巽为风", "兑为泽", "风水涣", "水泽节", "风泽中孚", "雷山小过", "水火既济", "火水未济"
+    ];
+
+    async function castAndAnalyze() {
+        const question = document.getElementById('user-question').value;
+        if (!question.trim()) {
+            alert("请先输入您的问题，方能感应气场。");
+            return;
         }
 
-        function randomCast() {
-            const name = hexagramNames[Math.floor(Math.random() * 64)];
-            const line = Math.floor(Math.random() * 6) + 1;
-            
-            const resultBox = document.getElementById('gua-result');
-            resultBox.innerHTML = `【${name}】<br> <span style="font-size:16px; color:#555;">变爻在第 ${line} 爻</span>`;
-            resultBox.style.display = "block";
-            
-            resultBox.dataset.gua = name;
-            resultBox.dataset.line = line;
-            
-            document.getElementById('ai-response').style.display = 'none';
+        // 1. 随机起卦
+        const name = hexagrams[Math.floor(Math.random() * 64)];
+        const line = Math.floor(Math.random() * 6) + 1;
+
+        // 2. UI反馈
+        document.getElementById('result-display').style.display = 'block';
+        document.getElementById('gua-name').innerText = `【${name}】`;
+        document.getElementById('gua-line').innerText = `变爻：第 ${line} 爻`;
+
+        const responseBox = document.getElementById('ai-response');
+        responseBox.style.display = 'block';
+        responseBox.innerHTML = '<p class="loading">正在接入高维算力进行战略解码...</p>';
+
+        // 3. 调用 Vercel 后端
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    messages: [
+                        { role: "system", content: "你是一位精通《易经》的现代战略分析师。请结合用户摇出的卦象、爻位和他们的现实困境，给出极具深度、客观且富有洞察力的战略建议。语气需冷静、专业。请先给出该卦的微言大义，再进行场景化分析。" },
+                        { role: "user", content: `卦象：${name}，变爻：第${line}爻。问题：${question}` }
+                    ]
+                })
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                // 处理 Gemini 的换行符
+                const text = data.choices[0].message.content.replace(/\n/g, '<br>');
+                responseBox.innerHTML = `<div>${text}</div>`;
+            } else {
+                const msg = data.error?.message || "服务器响应异常";
+                responseBox.innerHTML = `<p style="color:red">解码中断：${msg}</p>`;
+            }
+        } catch (e) {
+            responseBox.innerHTML = `<p style="color:red">网络连接异常，请检查云端部署。</p>`;
         }
+    }
+</script>
 
-        async function decodeStrategy() {
-            const question = document.getElementById('user-question').value;
-            const resultBox = document.getElementById('gua-result');
-            const responseBox = document.getElementById('ai-response');
-            
-            if (!resultBox.dataset.gua) {
-                alert("请先点击『静心感应起卦』生成卦象！");
-                return;
-            }
-            if (!question.trim()) {
-                alert("请输入您当前面临的困局或问题！");
-                return;
-            }
-
-            const guaName = resultBox.dataset.gua;
-            const guaLine = resultBox.dataset.line;
-            
-            responseBox.style.display = "block";
-            responseBox.innerHTML = "<p style='text-align:center; color:#7f8c8d;'>战略智库算力接入中，请稍候...</p>";
-
-            const messages = [
-                {
-                    role: "system",
-                    content: "你是一位精通《易经》和现代战略管理的智库专家。你的任务是根据用户摇出的易经卦象、变爻，结合他们具体的现实问题，给出深邃、客观、富有哲学智慧的战略分析。请准确引用相关的卦辞或爻辞进行解读，语言要清冷、专业、切中要害，排版清晰易读。"
-                },
-                {
-                    role: "user",
-                    content: `我摇出的卦象是【${guaName}】，变爻在第【${guaLine}】爻。我当前面临的问题是：“${question}”。请为我进行战略解码。`
-                }
-            ];
-
-            try {
-                // Vercel 特有的 API 路径
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ messages: messages })
-                });
-
-                const data = await response.json();
-                
-                if (response.ok) {
-                    let reply = data.choices[0].message.content;
-                    reply = reply.replace(/\n/g, '<br>');
-                    responseBox.innerHTML = reply;
-                } else {
-                    const errorMsg = data.error ? (data.error.message || JSON.stringify(data.error)) : '大模型服务器响应异常';
-                    responseBox.innerHTML = `<p style="color:#e74c3c; font-weight:bold;">推演失败：</p><p style="color:#c0392b;">${errorMsg}</p><p style="font-size:12px; color:#7f8c8d;">请检查后端 API_KEY 配置或额度。</p>`;
-                }
-            } catch (error) {
-                responseBox.innerHTML = `<p style="color:#e74c3c;">连接中断。云端中转站可能未正确部署，或网络异常。</p>`;
-            }
-        }
-    </script>
 </body>
 </html>
