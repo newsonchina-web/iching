@@ -4,7 +4,7 @@ export default async function handler(req, res) {
 
     try {
         const { messages } = req.body;
-        // 配置智谱 API Key，建议在 Vercel 环境变量中设置 ZHIPU_API_KEY
+        // 智谱 API Key
         const API_KEY = process.env.ZHIPU_API_KEY?.trim();
         
         if (!API_KEY) {
@@ -22,7 +22,7 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 model: "glm-4-flash", 
                 messages: messages,
-                temperature: 0.7
+                temperature: 0.5 // 稍微调低一点温度，保证它严格按照 JSON 格式输出原文
             })
         });
 

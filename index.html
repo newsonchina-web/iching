@@ -7,57 +7,59 @@
     <style>
         :root {
             --bg: #f5f1e7;
-            --text-main: #3e3832;
-            --text-light: #8a7f74;
+            --text-main: #2b2723;
+            --text-light: #70665c;
             --accent: #8e291c; /* 故宫红 */
             --border: #d4cbb8;
+            --card-bg: rgba(255, 255, 255, 0.7);
         }
         body {
             font-family: "Noto Serif SC", STSong, "Source Han Serif SC", "Times New Roman", serif;
             background-color: var(--bg);
-            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.05"/></svg>');
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.04"/></svg>');
             color: var(--text-main);
             margin: 0;
             padding: 20px;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
         }
         .container {
-            max-width: 560px;
+            max-width: 600px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(12px);
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.8);
-            box-shadow: 0 20px 50px rgba(62, 56, 50, 0.08);
-            border-radius: 8px;
-            padding: 50px 40px;
+            box-shadow: 0 15px 35px rgba(43, 39, 35, 0.05);
+            border-radius: 6px;
+            padding: 40px;
             box-sizing: border-box;
             position: relative;
+            margin-top: 20px;
+            margin-bottom: 40px;
         }
         .container::before {
             content: '';
             position: absolute;
-            top: 6px; left: 6px; right: 6px; bottom: 6px;
+            top: 5px; left: 5px; right: 5px; bottom: 5px;
             border: 1px solid var(--border);
-            border-radius: 4px;
             pointer-events: none;
         }
         h1 {
             text-align: center;
-            font-size: 34px;
+            font-size: 30px;
             font-weight: 500;
-            letter-spacing: 10px;
-            margin: 0 0 10px 0;
+            letter-spacing: 8px;
+            margin: 0 0 5px 0;
             color: var(--text-main);
         }
         .subtitle {
             text-align: center;
-            font-size: 12px;
+            font-size: 11px;
             letter-spacing: 4px;
             color: var(--text-light);
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             font-family: sans-serif;
             text-transform: uppercase;
         }
@@ -67,17 +69,16 @@
             border: none;
             border-bottom: 1px solid var(--border);
             background: transparent;
-            font-size: 18px;
+            font-size: 17px;
             font-family: inherit;
             text-align: center;
             color: var(--text-main);
             outline: none;
             transition: 0.3s;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
         .input-box:focus {
             border-bottom-color: var(--accent);
-            box-shadow: 0 1px 0 var(--accent);
         }
         .btn {
             display: block;
@@ -85,11 +86,10 @@
             background: var(--text-main);
             color: #fff;
             border: none;
-            padding: 16px;
-            font-size: 18px;
+            padding: 14px;
+            font-size: 17px;
             font-family: inherit;
-            letter-spacing: 8px;
-            border-radius: 4px;
+            letter-spacing: 6px;
             cursor: pointer;
             transition: 0.3s;
             position: relative;
@@ -97,8 +97,7 @@
         }
         .btn:hover {
             background: var(--accent);
-            box-shadow: 0 8px 20px rgba(142, 41, 28, 0.2);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
         .result-panel {
             margin-top: 40px;
@@ -109,39 +108,82 @@
             from { opacity: 0; transform: translateY(10px); } 
             to { opacity: 1; transform: translateY(0); } 
         }
-        .hexagram-header {
+        
+        /* 卦象展示区 */
+        .hexagram-visual {
             text-align: center;
-            border-bottom: 1px dashed var(--border);
-            padding-bottom: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
-        .hexagram-name {
-            font-size: 38px;
+        .hex-symbol {
+            font-size: 80px; /* 巨大的卦符 */
+            line-height: 1;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            font-family: "Segoe UI Symbol", "Apple Symbols", serif; /* 确保卦符显示 */
+        }
+        .hex-title {
+            font-size: 24px;
             font-weight: bold;
             color: var(--accent);
-            margin-bottom: 10px;
-            letter-spacing: 4px;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
         }
-        .hexagram-line {
-            font-size: 16px;
+        .hex-line {
+            font-size: 14px;
             color: var(--text-light);
         }
-        .ai-text {
-            line-height: 2;
-            font-size: 16px;
-            text-align: justify;
-            color: var(--text-main);
+
+        /* 文本解析卡片 */
+        .content-card {
+            background: rgba(255,255,255,0.8);
+            border: 1px solid var(--border);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
         }
-        .ai-text p {
+        .card-label {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--bg);
+            padding: 0 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--accent);
+            border: 1px solid var(--border);
+        }
+        .classic-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--text-main);
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+        .classic-desc {
+            font-size: 15px;
+            color: var(--text-light);
+            line-height: 1.6;
+            text-align: justify;
+        }
+        .strategy-text {
+            font-size: 16px;
+            color: var(--text-main);
+            line-height: 1.8;
+            text-align: justify;
+            margin-top: 10px;
+        }
+        .strategy-text p {
             margin-bottom: 1em;
         }
+
         .loading {
             text-align: center;
             color: var(--text-light);
             font-style: italic;
-            margin-top: 20px;
+            margin-top: 30px;
             font-size: 14px;
             display: none;
+            letter-spacing: 2px;
         }
     </style>
 </head>
@@ -152,20 +194,42 @@
     <div class="subtitle">I-Ching Strategic Analysis</div>
 
     <input type="text" id="user-question" class="input-box" placeholder="请输入当下的决策困局..." autocomplete="off">
-    <button class="btn" onclick="castAndAnalyze()">静心起卦</button>
+    <button class="btn" onclick="castAndAnalyze()">诚心起卦</button>
 
-    <div id="loading-indicator" class="loading">正在接入智库算力进行深度推演...</div>
+    <div id="loading-indicator" class="loading">易理验算中，正在调取先贤智慧...</div>
 
     <div id="result-panel" class="result-panel">
-        <div class="hexagram-header">
-            <div class="hexagram-name" id="gua-name">--</div>
-            <div class="hexagram-line" id="gua-line">--</div>
+        <!-- 视觉卦象区 -->
+        <div class="hexagram-visual">
+            <div class="hex-symbol" id="hex-symbol">䷀</div>
+            <div class="hex-title" id="hex-title">【乾为天】</div>
+            <div class="hex-line" id="hex-line">变爻：第 1 爻</div>
         </div>
-        <div class="ai-text" id="ai-response"></div>
+
+        <!-- 卦辞区 -->
+        <div class="content-card">
+            <div class="card-label">判大局 · 卦辞</div>
+            <div class="classic-text" id="gua-ci"></div>
+            <div class="classic-desc" id="gua-ci-desc"></div>
+        </div>
+
+        <!-- 爻辞区 -->
+        <div class="content-card">
+            <div class="card-label">观变数 · 爻辞</div>
+            <div class="classic-text" id="yao-ci"></div>
+            <div class="classic-desc" id="yao-ci-desc"></div>
+        </div>
+
+        <!-- 战略智库区 -->
+        <div class="content-card" style="border-color: var(--accent);">
+            <div class="card-label" style="background: var(--accent); color: #fff; border:none;">智库 · 现实解码</div>
+            <div class="strategy-text" id="strategy-content"></div>
+        </div>
     </div>
 </div>
 
 <script>
+    // 周文王64卦顺序（完美对应 Unicode 0x4DC0 开始的顺序）
     const hexagrams = [
         "乾为天", "坤为地", "水雷屯", "山水蒙", "水天需", "天水讼", "地水师", "水地比",
         "风天小畜", "天泽履", "地天泰", "天地否", "天火同人", "火天大有", "地山谦", "雷地豫",
@@ -180,15 +244,20 @@
     async function castAndAnalyze() {
         const question = document.getElementById('user-question').value;
         if (!question.trim()) {
-            alert("心诚则灵，请先输入您的问题。");
+            alert("请先输入您的问题，方能感应气场。");
             return;
         }
 
         document.getElementById('result-panel').style.display = 'none';
         document.getElementById('loading-indicator').style.display = 'block';
 
-        const name = hexagrams[Math.floor(Math.random() * 64)];
+        // 随机生成卦象和爻位
+        const index = Math.floor(Math.random() * 64);
+        const name = hexagrams[index];
         const line = Math.floor(Math.random() * 6) + 1;
+        
+        // 自动计算并生成对应的古卦符 (Unicode 魔法)
+        const symbol = String.fromCodePoint(0x4DC0 + index);
 
         try {
             const response = await fetch('/api/chat', {
@@ -196,33 +265,54 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     messages: [
-                        { role: "system", content: "你是一位精通《易经》的现代战略分析师。请结合用户摇出的卦象、爻位和现实困境，给出深邃、客观且富有洞察力的战略建议。语气需冷静、专业，排版清晰，分段论述。" },
-                        { role: "user", content: `卦象：【${name}】，变爻：第 ${line} 爻。问题：${question}` }
+                        { 
+                            role: "system", 
+                            content: "你是一位精通《易经》的国学大师与战略智库。请严格输出一段合法的 JSON 格式数据，不要包含任何 Markdown 代码块包裹（不要输出 ```json）。JSON 必须精确包含以下5个字段：
+1. "gua_ci": "该卦准确的卦辞原文"
+2. "gua_ci_desc": "卦辞的白话翻译与易理精要"
+3. "yao_ci": "该变爻准确的爻辞原文"
+4. "yao_ci_desc": "爻辞的白话翻译与易理精要"
+5. "strategy": "结合用户提出的现实问题，给出的现代战略推演和破局建议(请使用 <p> 标签分段)""
+                        },
+                        { role: "user", content: `卦象：【${name}】，变爻：第 ${line} 爻。现实问题：${question}` }
                     ]
                 })
             });
 
             const data = await response.json();
             
-            document.getElementById('loading-indicator').style.display = 'none';
-            document.getElementById('result-panel').style.display = 'block';
-            document.getElementById('gua-name').innerText = `【${name}】`;
-            document.getElementById('gua-line').innerText = `变爻：第 ${line} 爻`;
-
-            const responseBox = document.getElementById('ai-response');
-
             if (response.ok) {
-                let text = data.choices[0].message.content;
-                // 处理换行符，使其更符合中文排版
-                text = text.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
-                responseBox.innerHTML = text;
+                // 解析返回的 JSON (增加鲁棒性，处理大模型可能带有的 Markdown 代码块)
+                let rawText = data.choices[0].message.content.trim();
+                if (rawText.startsWith('```')) {
+                    rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+                }
+                
+                const result = JSON.parse(rawText);
+
+                // 填充 UI 数据
+                document.getElementById('hex-symbol').innerText = symbol;
+                document.getElementById('hex-title').innerText = `【${name}】`;
+                document.getElementById('hex-line').innerText = `变爻：第 ${line} 爻`;
+
+                document.getElementById('gua-ci').innerText = result.gua_ci;
+                document.getElementById('gua-ci-desc').innerText = result.gua_ci_desc;
+                
+                document.getElementById('yao-ci').innerText = result.yao_ci;
+                document.getElementById('yao-ci-desc').innerText = result.yao_ci_desc;
+
+                document.getElementById('strategy-content').innerHTML = result.strategy;
+
+                // 切换展示
+                document.getElementById('loading-indicator').style.display = 'none';
+                document.getElementById('result-panel').style.display = 'block';
+
             } else {
-                responseBox.innerHTML = `<p style="color:var(--accent); text-align:center;">推演中断：<br>${data.error?.message || "接口访问异常"}</p>`;
+                throw new Error(data.error?.message || "接口访问异常");
             }
         } catch (e) {
             document.getElementById('loading-indicator').style.display = 'none';
-            document.getElementById('result-panel').style.display = 'block';
-            document.getElementById('ai-response').innerHTML = `<p style="color:var(--accent); text-align:center;">连接中断。请检查云端部署状态。</p>`;
+            alert(`推演失败，请重试。错误信息: ${e.message}`);
         }
     }
 </script>
