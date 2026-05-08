@@ -5,7 +5,6 @@ export default async function handler(req, res) {
     try {
         const { messages } = req.body;
         const API_KEY = process.env.ZHIPU_API_KEY?.trim();
-        
         if (!API_KEY) { return res.status(500).json({ error: { message: '服务器未配置 ZHIPU_API_KEY。' } }); }
 
         const API_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
@@ -14,7 +13,7 @@ export default async function handler(req, res) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_KEY}` },
             body: JSON.stringify({
-                model: "glm-4-flash", messages: messages, temperature: 0.3 // 调低温度以确保古文引用的绝对准确性
+                model: "glm-4-flash", messages: messages, temperature: 0.3 // 调低温度以确保古文引用的绝对准确性，根除幻觉
             })
         });
 
