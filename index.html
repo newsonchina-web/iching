@@ -2,250 +2,180 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>观象 · 易枢 | 东方战略智库</title>
+    <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
     <style>
         :root {
-            --bg-dark: #0a0a0c;
-            --text-main: #d1c5b4;
-            --text-dim: #8c857a;
-            --gold: #c2a373;
-            --gold-glow: rgba(194, 163, 115, 0.3);
-            --red-accent: #7a1f16;
-            --glass-bg: rgba(20, 20, 22, 0.65);
+            --bg-dark: #0a0a0c; --text-main: #d1c5b4; --text-dim: #8c857a;
+            --gold: #c2a373; --gold-glow: rgba(194, 163, 115, 0.3);
+            --red-accent: #7a1f16; --glass-bg: rgba(20, 20, 22, 0.65);
             --glass-border: rgba(194, 163, 115, 0.15);
         }
-        
         body, html {
-            margin: 0; padding: 0;
-            width: 100%; min-height: 100vh;
-            background-color: var(--bg-dark);
-            font-family: "Palatino Linotype", "Noto Serif SC", STSong, "Source Han Serif SC", serif;
-            color: var(--text-main);
-            overflow-x: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            margin: 0; padding: 0; width: 100%; min-height: 100vh;
+            background-color: var(--bg-dark); font-family: "Noto Serif SC", STSong, "Source Han Serif SC", serif;
+            color: var(--text-main); overflow-x: hidden; display: flex; justify-content: center; align-items: flex-start;
         }
-
-        #canvas-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-
+        #canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .wrapper {
-            position: relative;
-            z-index: 10;
-            max-width: 640px;
-            width: 100%;
-            padding: 40px 20px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            position: relative; z-index: 10; max-width: 640px; width: 100%;
+            padding: 40px 20px 100px 20px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center;
         }
-
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
-            margin-top: 2vh;
-        }
+        .header { text-align: center; margin-bottom: 50px; margin-top: 2vh; }
         .header h1 {
-            font-size: 36px;
-            font-weight: 400;
-            letter-spacing: 16px;
-            margin: 0 0 10px 16px;
-            background: linear-gradient(to bottom, #fff, var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 36px; font-weight: 400; letter-spacing: 16px; margin: 0 0 10px 16px;
+            background: linear-gradient(to bottom, #fff, var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             text-shadow: 0 0 30px var(--gold-glow);
         }
         .header .stamp {
-            font-size: 11px;
-            letter-spacing: 6px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            font-family: sans-serif;
-            position: relative;
-            display: inline-block;
+            font-size: 11px; letter-spacing: 6px; color: var(--text-dim); text-transform: uppercase; font-family: sans-serif;
+            position: relative; display: inline-block;
         }
-        .header .stamp::before, .header .stamp::after {
-            content: ''; position: absolute;
-            top: 50%; width: 30px; height: 1px;
-            background: var(--text-dim); opacity: 0.3;
-        }
-        .header .stamp::before { left: -40px; }
-        .header .stamp::after { right: -40px; }
-
+        .header .stamp::before, .header .stamp::after { content: ''; position: absolute; top: 50%; width: 30px; height: 1px; background: var(--text-dim); opacity: 0.3; }
+        .header .stamp::before { left: -40px; } .header .stamp::after { right: -40px; }
         .control-panel {
-            width: 100%;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            padding: 30px;
-            box-sizing: border-box;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            margin-bottom: 40px;
-            position: relative;
+            width: 100%; background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border); border-radius: 8px; padding: 30px; box-sizing: border-box;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 40px; position: relative;
         }
         .corner { position: absolute; width: 8px; height: 8px; border-color: var(--gold); border-style: solid; opacity: 0.5; }
-        .corner-tl { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
-        .corner-tr { top: -1px; right: -1px; border-width: 1px 1px 0 0; }
-        .corner-bl { bottom: -1px; left: -1px; border-width: 0 0 1px 1px; }
-        .corner-br { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
-
+        .corner-tl { top: -1px; left: -1px; border-width: 1px 0 0 1px; } .corner-tr { top: -1px; right: -1px; border-width: 1px 1px 0 0; }
+        .corner-bl { bottom: -1px; left: -1px; border-width: 0 0 1px 1px; } .corner-br { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
         .input-box {
-            width: 100%;
-            padding: 15px 0;
-            border: none;
-            border-bottom: 1px solid rgba(194, 163, 115, 0.3);
-            background: transparent;
-            font-size: 16px;
-            font-family: inherit;
-            text-align: center;
-            color: #fff;
-            outline: none;
-            transition: 0.4s;
-            margin-bottom: 30px;
-            letter-spacing: 1px;
+            width: 100%; padding: 15px 0; border: none; border-bottom: 1px solid rgba(194, 163, 115, 0.3); background: transparent;
+            font-size: 16px; font-family: inherit; text-align: center; color: #fff; outline: none; transition: 0.4s; margin-bottom: 30px; letter-spacing: 1px;
         }
-        .input-box:focus { border-bottom-color: var(--gold); }
-        .input-box::placeholder { color: #5a544d; }
-
+        .input-box:focus { border-bottom-color: var(--gold); } .input-box::placeholder { color: #5a544d; }
         .btn {
-            display: block;
-            width: 100%;
-            background: transparent;
-            color: var(--gold);
-            border: 1px solid var(--gold);
-            padding: 16px;
-            font-size: 16px;
-            font-family: inherit;
-            letter-spacing: 12px;
-            text-indent: 12px;
-            border-radius: 2px;
-            cursor: pointer;
-            transition: 0.4s;
-            position: relative;
-            overflow: hidden;
+            display: block; width: 100%; background: transparent; color: var(--gold); border: 1px solid var(--gold);
+            padding: 16px; font-size: 16px; font-family: inherit; letter-spacing: 12px; text-indent: 12px; border-radius: 2px;
+            cursor: pointer; transition: 0.4s; position: relative; overflow: hidden;
         }
-        .btn:disabled {
-            color: var(--text-dim);
-            border-color: var(--text-dim);
-            cursor: not-allowed;
-        }
+        .btn:disabled { color: var(--text-dim); border-color: var(--text-dim); cursor: not-allowed; }
         .btn::before {
             content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(194, 163, 115, 0.2), transparent);
-            transition: 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(194, 163, 115, 0.2), transparent); transition: 0.5s;
         }
-        .btn:hover:not(:disabled) {
-            background: rgba(194, 163, 115, 0.1);
-            box-shadow: 0 0 20px var(--gold-glow);
-        }
+        .btn:hover:not(:disabled) { background: rgba(194, 163, 115, 0.1); box-shadow: 0 0 20px var(--gold-glow); }
         .btn:hover:not(:disabled)::before { left: 100%; }
-
-        .status-msg {
-            text-align: center; font-size: 14px; letter-spacing: 2px;
-            line-height: 2; margin-top: -20px; margin-bottom: 30px;
-            display: none;
-        }
+        .status-msg { text-align: center; font-size: 14px; letter-spacing: 2px; line-height: 2; margin-top: -20px; margin-bottom: 30px; display: none; }
         .status-loading { color: var(--gold); animation: pulse 2s infinite; }
         @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; text-shadow: 0 0 10px var(--gold-glow); } 100% { opacity: 0.5; } }
         .status-error { color: #ff5252; background: rgba(255, 82, 82, 0.1); padding: 10px; border-radius: 4px; border: 1px solid rgba(255, 82, 82, 0.3); }
-
-        .result-panel {
-            width: 100%;
-            display: none;
-            animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+        .result-panel { width: 100%; display: none; animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
         .gua-display { text-align: center; margin-bottom: 40px; }
         .gua-symbol {
-            font-size: 110px; line-height: 1;
-            background: linear-gradient(to bottom, #fff, var(--gold));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            font-family: "Segoe UI Symbol", "Apple Symbols", serif;
+            font-size: 110px; line-height: 1; background: linear-gradient(to bottom, #fff, var(--gold));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: "Segoe UI Symbol", "Apple Symbols", serif;
             margin-bottom: 10px; filter: drop-shadow(0 0 15px var(--gold-glow));
         }
         .gua-name { font-size: 26px; color: var(--text-main); letter-spacing: 4px; margin-bottom: 8px; }
         .gua-details { font-size: 13px; color: var(--gold); letter-spacing: 2px; }
-
         .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 4px;
-            padding: 30px 25px;
-            margin-bottom: 25px;
-            position: relative;
+            background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border);
+            border-radius: 4px; padding: 30px 25px; margin-bottom: 25px; position: relative;
         }
         .card-title {
-            position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-            background: var(--bg-dark); padding: 0 15px; font-size: 12px;
-            color: var(--gold); letter-spacing: 4px; border: 1px solid var(--glass-border);
-            border-radius: 20px; box-shadow: 0 0 10px #000;
+            position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--bg-dark); padding: 0 15px; font-size: 12px;
+            color: var(--gold); letter-spacing: 4px; border: 1px solid var(--glass-border); border-radius: 20px; box-shadow: 0 0 10px #000;
         }
-        
-        .classic-quote {
-            text-align: center; font-size: 20px; color: #fff;
-            margin-bottom: 15px; padding-bottom: 15px;
-            border-bottom: 1px dashed rgba(255,255,255,0.15);
-            font-weight: 500;
-        }
+        .classic-quote { text-align: center; font-size: 20px; color: #fff; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed rgba(255,255,255,0.15); font-weight: 500; }
         .classic-explain { font-size: 15px; color: var(--text-dim); line-height: 1.8; text-align: justify; }
-        
         .strategy-card { border-color: rgba(122, 31, 22, 0.4); }
         .strategy-title { background: var(--red-accent); color: #fff; border-color: var(--red-accent); }
         .strategy-content { font-size: 16px; color: var(--text-main); line-height: 2; text-align: justify; }
         .strategy-content p { margin-bottom: 1.2em; }
         .strategy-content strong { color: var(--gold); font-weight: normal; border-bottom: 1px dashed var(--gold); padding-bottom: 2px; }
-
+        .share-control {
+            position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(10, 10, 12, 0.9);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-top: 1px solid var(--glass-border);
+            padding: 20px; box-sizing: border-box; z-index: 100; display: none; justify-content: center;
+        }
+        .share-control-inner { max-width: 600px; width: 100%; }
+        #share-card-template {
+            position: absolute; left: -9999px; top: -9999px; width: 500px; padding: 50px; background: #fdfdfc;
+            color: #2b2723; border: 10px solid #f2efea; box-shadow: 0 0 50px rgba(0,0,0,0.1); display: none; flex-direction: column; align-items: center;
+        }
+        .share-card-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #d4cbb8; padding-bottom: 20px; width: 100%; }
+        .share-card-header h2 { font-family: serif; font-size: 28px; letter-spacing: 10px; margin: 0 0 10px 0; color: #2b2723; }
+        .share-card-header p { font-size: 10px; color: #a59c90; letter-spacing: 3px; margin: 0; text-transform: uppercase; }
+        .tmpl-gua-symbol { font-size: 120px; font-family: serif; color: #8e291c; margin-bottom: 10px; }
+        .tmpl-gua-name { font-size: 24px; font-weight: bold; color: #2b2723; margin-bottom: 30px; }
+        .tmpl-strategy-block { font-size: 16px; color: #3e3832; line-height: 1.8; text-align: justify; margin-bottom: 40px; border-top: 1px dashed #d4cbb8; padding-top: 30px; width: 100%; }
+        .tmpl-strategy-block p { margin-bottom: 1em; } .tmpl-strategy-block strong { color: #8e291c; font-weight: normal; border-bottom: 1px solid #8e291c; }
+        .share-card-footer { text-align: center; border-top: 1px solid #d4cbb8; padding-top: 20px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .tmpl-qrcode-canvas { width: 80px; height: 80px; margin-bottom: 10px; }
+        .share-card-footer p { font-size: 10px; color: #a59c90; margin: 0; letter-spacing: 1px; }
+        #image-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 1000; display: none; justify-content: center; align-items: center;
+            opacity: 0; animation: fadeInModal 0.4s forwards;
+        }
+        @keyframes fadeInModal { to { opacity: 1; } }
+        .modal-content { max-width: 90%; max-height: 90%; display: flex; flex-direction: column; align-items: center; position: relative; }
+        #final-share-image { max-width: 100%; max-height: 80vh; box-shadow: 0 0 50px rgba(194, 163, 115, 0.4); border: 1px solid var(--gold); }
+        .modal-tip { color: var(--gold); margin-top: 20px; font-size: 14px; letter-spacing: 2px; }
+        .close-modal-btn { position: absolute; top: -40px; right: 0; background: none; border: 1px solid var(--gold); color: var(--gold); padding: 5px 15px; cursor: pointer; border-radius: 20px; font-size: 12px; }
     </style>
 </head>
 <body>
 
 <canvas id="canvas-bg"></canvas>
 
+<div id="share-card-template">
+    <div class="share-card-header">
+        <h2>观象·易枢</h2>
+        <p>Digitally Interpreting the Matrix of Changes</p>
+    </div>
+    <div class="tmpl-gua-symbol" id="tmpl-gua-symbol">䷀</div>
+    <div class="tmpl-gua-name" id="tmpl-gua-name">乾为天 · 变爻一</div>
+    <div class="tmpl-strategy-block" id="tmpl-strategy-block"></div>
+    <div class="share-card-footer">
+        <canvas id="tmpl-qrcode-canvas" class="tmpl-qrcode-canvas"></canvas>
+        <p>长按二维码 · 凝神起卦</p>
+        <p>Oriental Strategic Insights | yishu-strategy.com</p>
+    </div>
+</div>
+
+<div id="image-modal">
+    <div class="modal-content">
+        <button class="close-modal-btn" onclick="closeModal()">关闭</button>
+        <img src="" alt="分享图预览" id="final-share-image">
+        <div class="modal-tip">长按上方图片，选择“保存图片”至相册分享</div>
+    </div>
+</div>
+
 <div class="wrapper">
     <div class="header">
         <h1>观象·易枢</h1>
         <div class="stamp">东方哲思与高维算力矩阵</div>
     </div>
-
     <div class="control-panel">
         <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
         <div class="corner corner-bl"></div><div class="corner corner-br"></div>
         <input type="text" id="user-question" class="input-box" placeholder="写下当下的困局、迷茫或抉择..." autocomplete="off">
         <button class="btn" id="submit-btn" onclick="castAndAnalyze()">凝神起卦</button>
     </div>
-
     <div id="status-box" class="status-msg"></div>
-
     <div id="result-panel" class="result-panel">
         <div class="gua-display">
             <div class="gua-symbol" id="hex-symbol">䷀</div>
             <div class="gua-name" id="hex-title">【乾为天】</div>
-            <div class="gua-details" id="hex-line">变爻：第 1 爻</div>
+            <div class="gua-details" id="hex-line">爻名：初九</div>
         </div>
-
         <div class="card">
             <div class="card-title">大局 · 卦意</div>
             <div class="classic-quote" id="gua-ci"></div>
             <div class="classic-explain" id="gua-ci-desc"></div>
         </div>
-
         <div class="card">
             <div class="card-title">微观 · 爻变</div>
             <div class="classic-quote" id="yao-ci"></div>
             <div class="classic-explain" id="yao-ci-desc"></div>
         </div>
-
         <div class="card strategy-card">
             <div class="card-title strategy-title">天人合一 · 现实推演</div>
             <div class="strategy-content" id="strategy-content"></div>
@@ -253,63 +183,41 @@
     </div>
 </div>
 
+<div class="share-control" id="share-control">
+    <div class="share-control-inner">
+        <button class="btn" id="share-btn" onclick="generateShareImage()">一键生成绝美分享图</button>
+    </div>
+</div>
+
 <script>
-    // 粒子背景逻辑
     const canvas = document.getElementById('canvas-bg');
     const ctx = canvas.getContext('2d');
     let width, height, particles;
-
     function initCanvas() {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-        particles = [];
+        width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; particles = [];
         const count = window.innerWidth < 768 ? 30 : 60;
         for (let i = 0; i < count; i++) {
             particles.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                vx: (Math.random() - 0.5) * 0.3,
-                vy: (Math.random() - 0.5) * 0.3,
-                size: Math.random() * 1.5 + 0.5,
-                alpha: Math.random() * 0.5 + 0.1
+                x: Math.random() * width, y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+                size: Math.random() * 1.5 + 0.5, alpha: Math.random() * 0.5 + 0.1
             });
         }
     }
-
     function animate() {
-        ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = '#0a0a0c';
-        ctx.fillRect(0, 0, width, height);
-        
+        ctx.clearRect(0, 0, width, height); ctx.fillStyle = '#0a0a0c'; ctx.fillRect(0, 0, width, height);
         for (let i = 0; i < particles.length; i++) {
-            let p = particles[i];
-            p.x += p.vx; p.y += p.vy;
-            if (p.x < 0 || p.x > width) p.vx = -p.vx;
-            if (p.y < 0 || p.y > height) p.vy = -p.vy;
-
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(194, 163, 115, ${p.alpha})`;
-            ctx.fill();
-
+            let p = particles[i]; p.x += p.vx; p.y += p.vy;
+            if (p.x < 0 || p.x > width) p.vx = -p.vx; if (p.y < 0 || p.y > height) p.vy = -p.vy;
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fillStyle = `rgba(194, 163, 115, ${p.alpha})`; ctx.fill();
             for (let j = i + 1; j < particles.length; j++) {
-                let p2 = particles[j];
-                let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                if (dist < 100) {
-                    ctx.beginPath();
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(p2.x, p2.y);
-                    ctx.strokeStyle = `rgba(194, 163, 115, ${0.15 - dist/1000})`;
-                    ctx.stroke();
-                }
+                let p2 = particles[j]; let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                if (dist < 100) { ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.strokeStyle = `rgba(194, 163, 115, ${0.15 - dist/1000})`; ctx.stroke(); }
             }
         }
         requestAnimationFrame(animate);
     }
-    
-    window.addEventListener('resize', initCanvas);
-    initCanvas();
-    animate();
+    window.addEventListener('resize', initCanvas); initCanvas(); animate();
 
     const hexagrams = [
         "乾为天", "坤为地", "水雷屯", "山水蒙", "水天需", "天水讼", "地水师", "水地比",
@@ -322,6 +230,16 @@
         "巽为风", "兑为泽", "风水涣", "水泽节", "风泽中孚", "雷山小过", "水火既济", "火水未济"
     ];
 
+    // 底层阴阳二进制架构 (1=阳, 0=阴，从下到上)
+    const hexagramBinaries = ["111111", "000000", "100010", "010001", "111010", "010111", "010000", "000010", "111011", "110111", "111000", "000111", "101111", "111101", "001000", "000100", "100110", "011001", "110000", "000011", "100101", "101001", "000001", "100000", "100111", "111001", "100001", "011110", "010010", "101101", "001110", "011100", "001111", "111100", "000101", "101000", "101011", "110101", "001010", "010100", "110001", "100011", "111110", "011111", "000110", "011000", "010110", "011010", "101110", "011101", "100100", "001001", "001011", "110100", "101100", "001101", "011011", "110110", "010011", "110010", "110011", "001100", "101010", "010101"];
+
+    function getLineName(binaryStr, lineNumber) {
+        const isYang = binaryStr[lineNumber - 1] === '1';
+        const yangNames = ["初九", "九二", "九三", "九四", "九五", "上九"];
+        const yinNames = ["初六", "六二", "六三", "六四", "六五", "上六"];
+        return isYang ? yangNames[lineNumber - 1] : yinNames[lineNumber - 1];
+    }
+
     function showStatus(msg, isError = false) {
         const box = document.getElementById('status-box');
         box.style.display = 'block';
@@ -329,62 +247,44 @@
         box.innerHTML = msg;
     }
 
-    // 绝对防崩溃解析器（利用标题锚点，不依赖 JSON）
     function parseAIResponse(text) {
-        const sections = {
-            gua_ci: "【卦辞原文】",
-            gua_ci_desc: "【卦辞解析】",
-            yao_ci: "【爻辞原文】",
-            yao_ci_desc: "【爻辞解析】",
-            strategy: "【战略推演】"
-        };
-        
-        let parsed = {};
-        let keys = Object.keys(sections);
-        
+        const sections = { gua_ci: "【卦辞原文】", gua_ci_desc: "【卦辞解析】", yao_ci: "【爻辞原文】", yao_ci_desc: "【爻辞解析】", strategy: "【战略推演】" };
+        let parsed = {}; let keys = Object.keys(sections);
         for(let i=0; i<keys.length; i++) {
-            let key = keys[i];
-            let startTag = sections[key];
-            let nextTag = i < keys.length - 1 ? sections[keys[i+1]] : null;
-            
+            let key = keys[i]; let startTag = sections[key]; let nextTag = i < keys.length - 1 ? sections[keys[i+1]] : null;
             let startIndex = text.indexOf(startTag);
-            if (startIndex === -1) {
-                parsed[key] = "（算力连接出现偏差，未能获取此段内容）";
-                continue;
-            }
+            if (startIndex === -1) { parsed[key] = "（算力连接偏差，请重新起卦）"; continue; }
             startIndex += startTag.length;
-            
             let endIndex = nextTag ? text.indexOf(nextTag, startIndex) : text.length;
             if (endIndex === -1) endIndex = text.length;
-            
-            // 清理多余换行符
             let content = text.substring(startIndex, endIndex).trim();
-            // 处理转义字符
             content = content.replace(/\n/g, '<br>');
             parsed[key] = content;
         }
         return parsed;
     }
 
+    let currentGuaData = null;
+
     async function castAndAnalyze() {
         const question = document.getElementById('user-question').value;
         const btn = document.getElementById('submit-btn');
+        const shareControl = document.getElementById('share-control');
         
-        if (!question.trim()) {
-            showStatus("心不可不诚，请写下您的所思所困。", true);
-            return;
-        }
+        if (!question.trim()) { showStatus("心不可不诚，请写下您的所思所困。", true); return; }
 
-        // UI 状态重置：让按钮也显示加载中，防止误以为没点到
         document.getElementById('result-panel').style.display = 'none';
-        btn.innerText = "太极流转中...";
-        btn.disabled = true;
+        shareControl.style.display = 'none';
+        btn.innerText = "太极流转中..."; btn.disabled = true;
         showStatus("太极生两仪... 正在调取高维算力推演天机");
 
         const index = Math.floor(Math.random() * 64);
         const name = hexagrams[index];
         const line = Math.floor(Math.random() * 6) + 1;
         const symbol = String.fromCodePoint(0x4DC0 + index);
+        
+        // 核心纠错：计算确切的爻名（如初九、六二），彻底锁死大模型的检索范围
+        const exactLineName = getLineName(hexagramBinaries[index], line);
 
         try {
             const response = await fetch('/api/chat', {
@@ -394,39 +294,37 @@
                     messages: [
                         { 
                             role: "system", 
-                            content: `你是一位深谙《周易》象数理的国学大师，同时具备顶尖的现代战略视野。请严格按照以下5个标题格式输出（必须带【】符号），不要输出任何其他废话：
+                            content: `你是一位深谙《周易》的国学大师与战略智库。警告：事实性内容需要有绝对的权威出处，请不要捏造事实（模型幻觉）。你必须严格根据用户提供的具体“卦名”与“爻名”（如：初九、上六）检索《易经》原本对应的爻辞。严禁张冠李戴（比如绝对不可将大过卦的爻辞安在兑卦上）。
+
+请严格按照以下5个标题格式输出（必须带【】符号），不要输出JSON或Markdown：
 
 【卦辞原文】
-(此处输出该卦完整的卦辞原文)
+(准确输出该卦完整的卦辞原文)
 【卦辞解析】
-(此处输出深度的卦象拆解，如外卦内卦，以及卦辞大意)
+(卦象的深度拆解与大意)
 【爻辞原文】
-(此处输出该变爻的爻辞原文)
+(准确输出该“爻名”对应的爻辞原文，一字不可错)
 【爻辞解析】
-(此处输出爻位解析与吉凶精要)
+(该爻位的解析与吉凶)
 【战略推演】
-(必须将易经原文的意境与用户的现实困境极度深度融合！引经据典，指出该象在现实商战或人生中的映射，推演出破局之法。使用<p>分段排版，重点加粗。)`
+(将易理与用户的现实问题深度融合，推演出破局之法。用<p>分段。)`
                         },
-                        { role: "user", content: `卦象：【${name}】，变爻：第 ${line} 爻。现实问题：${question}` }
+                        { role: "user", content: `卦象：【${name}】，变爻：第 ${line} 爻。注意：根据易经底层二进制结构推算，该爻的确切爻名为【${exactLineName}】。现实问题：${question}` }
                     ]
                 })
             });
 
             const data = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(data.error?.message || "天道网络阻碍，接口访问异常");
-            }
+            if (!response.ok) { throw new Error(data.error?.message || "天道网络阻碍，接口访问异常"); }
 
             const rawText = data.choices[0].message.content;
-            
-            // 使用防崩溃解析器
             const result = parseAIResponse(rawText);
 
-            // 渲染数据
+            currentGuaData = { symbol, name, exactLineName, strategy: result.strategy };
+
             document.getElementById('hex-symbol').innerText = symbol;
             document.getElementById('hex-title').innerText = `【${name}】`;
-            document.getElementById('hex-line').innerText = `变爻：第 ${line} 爻`;
+            document.getElementById('hex-line').innerText = `爻位：${exactLineName}`;
 
             document.getElementById('gua-ci').innerText = `「 ${result.gua_ci} 」`;
             document.getElementById('gua-ci-desc').innerHTML = result.gua_ci_desc;
@@ -434,20 +332,57 @@
             document.getElementById('yao-ci-desc').innerHTML = result.yao_ci_desc;
             document.getElementById('strategy-content').innerHTML = result.strategy;
 
-            // 恢复 UI 状态
             document.getElementById('status-box').style.display = 'none';
             document.getElementById('result-panel').style.display = 'block';
+            shareControl.style.display = 'flex';
             document.getElementById('result-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         } catch (e) {
             console.error(e);
-            showStatus(`推演中断。<br>原因：${e.message}<br>请刷新页面或检查后台秘钥配置。`, true);
+            showStatus(`推演中断。<br>原因：${e.message}`, true);
+            currentGuaData = null;
         } finally {
-            // 无论成功失败，恢复按钮状态
-            btn.innerText = "凝神起卦";
-            btn.disabled = false;
+            btn.innerText = "凝神起卦"; btn.disabled = false;
         }
     }
+
+    async function generateShareImage() {
+        if (!currentGuaData) { alert("推演未完成，无法感应画意。"); return; }
+        const shareBtn = document.getElementById('share-btn');
+        const modal = document.getElementById('image-modal');
+        const finalImage = document.getElementById('final-share-image');
+        const template = document.getElementById('share-card-template');
+        
+        shareBtn.innerText = "画意熔铸中..."; shareBtn.disabled = true;
+
+        document.getElementById('tmpl-gua-symbol').innerText = currentGuaData.symbol;
+        document.getElementById('tmpl-gua-name').innerText = `${currentGuaData.name} · ${currentGuaData.exactLineName}`;
+        document.getElementById('tmpl-strategy-block').innerHTML = currentGuaData.strategy;
+
+        const qrcodeCanvas = document.getElementById('tmpl-qrcode-canvas');
+        try {
+            await QRCode.toCanvas(qrcodeCanvas, 'https://yishu-strategy.com', {
+                width: 80, margin: 1, color: { dark: '#2b2723', light: '#fdfdfc' }
+            });
+        } catch (err) { console.error("QR Error", err); }
+
+        template.style.display = 'flex'; 
+
+        try {
+            await new Promise(r => setTimeout(r, 200));
+            const canvas = await html2canvas(template, {
+                scale: 2, useCORS: true, backgroundColor: '#fdfdfc', logging: false
+            });
+            finalImage.src = canvas.toDataURL('image/png');
+            modal.style.display = 'flex';
+        } catch (e) {
+            console.error(e); alert("画意推演中断，云端矩阵故障");
+        } finally {
+            template.style.display = 'none'; 
+            shareBtn.innerText = "一键生成绝美分享图"; shareBtn.disabled = false;
+        }
+    }
+    function closeModal() { document.getElementById('image-modal').style.display = 'none'; }
 </script>
 </body>
 </html>
