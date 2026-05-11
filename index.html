@@ -86,10 +86,10 @@
 
         .share-control { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(5, 7, 10, 0.95); backdrop-filter: blur(10px); border-top: 1px solid var(--glass-border); padding: 20px; box-sizing: border-box; z-index: 100; display: none; justify-content: center; }
 
-        /* --- V16/V17 宇宙宿命感竖版分享图 --- */
+        /* --- V16 宇宙宿命感竖版分享图 (全要素) --- */
         #share-card-template {
             position: absolute; left: -9999px; top: -9999px; 
-            width: 800px; 
+            width: 800px; /* 竖版高分辨率宽度 */
             padding: 80px 60px 60px 60px; 
             background: linear-gradient(135deg, #05070a 0%, #111522 50%, #05070a 100%);
             color: #d1c5b4; border: 2px solid #3a3225; box-shadow: 0 0 80px rgba(0,0,0,1);
@@ -120,7 +120,12 @@
         .tmpl-strat-content p { margin-bottom: 1.2em; }
         .tmpl-strat-content strong { color: #d4af37; font-weight: normal; border-bottom: 1px solid #d4af37; }
 
-        .tmpl-footer-art { width: 100%; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(212,175,55,0.2); padding-top: 40px; }
+        /* V16 底部艺术区域：文王 vs AI */
+        .tmpl-footer-art { 
+            width: 100%; display: flex; justify-content: space-between; align-items: center; 
+            border-top: 1px solid rgba(212,175,55,0.2); padding-top: 40px; 
+        }
+        
         .art-side { display: flex; flex-direction: column; align-items: center; width: 160px; opacity: 0.8;}
         .art-icon { width: 60px; height: 60px; margin-bottom: 15px; }
         .art-text-main { font-size: 16px; color: #d4af37; letter-spacing: 4px; margin-bottom: 5px; font-weight: bold;}
@@ -174,12 +179,13 @@
             <div class="tmpl-card-desc" id="tmpl-yao-ci-desc"></div>
         </div>
         <div class="tmpl-strategy-box">
-            <div class="tmpl-strat-label">现实定局</div>
+            <div class="tmpl-strat-label">现实推演</div>
             <div class="tmpl-strat-content" id="tmpl-strategy-block"></div>
         </div>
     </div>
 
     <div class="tmpl-footer-art">
+        <!-- 左侧：代表周文王古智 (以竹简与卦盘意象呈现) -->
         <div class="art-side">
             <svg class="art-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="50" cy="50" r="45" stroke="#d4af37" stroke-width="2" stroke-dasharray="4 4"/>
@@ -191,6 +197,7 @@
             <div class="art-text-sub">先秦古智·观象</div>
         </div>
 
+        <!-- 中间：二维码 -->
         <div class="qr-center">
             <div class="qr-frame">
                 <canvas id="tmpl-qrcode-canvas" class="tmpl-qrcode-canvas"></canvas>
@@ -199,6 +206,7 @@
             <div class="url-text">yishu-strategy.com</div>
         </div>
 
+        <!-- 右侧：代表高维AI算力 (以神经网络与核心意象呈现) -->
         <div class="art-side">
             <svg class="art-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <polygon points="50,10 90,30 90,70 50,90 10,70 10,30" stroke="#d4af37" stroke-width="2"/>
@@ -348,26 +356,14 @@
                     messages: [
                         { 
                             role: "system", 
-                            content: `你是一位深谙《周易》象数理的国学大师，兼具顶尖商业与人生战略顾问的视角（如王阳明+彼得德鲁克）。
-警告：根据二进制推算，该爻确切爻名为【${exactLineName}】。你必须严格输出此爻名的真实爻辞，严禁幻觉与张冠李戴！智库品牌名为“易鼎战略”。
+                            content: `你是一位深谙《周易》的国学大师与战略智库。警告：根据二进制结构推算，该爻的确切爻名为【${exactLineName}】。你必须严格检索此爻名在《易经》原本中对应的爻辞，严禁张冠李戴。品牌名为“易鼎战略”。
 
-请严格按以下5个带【】的标题格式输出（不要输出JSON或Markdown语法）：
-
+请严格按照标题格式输出：
 【卦辞原文】
-(准确无误的完整卦辞)
-【卦辞解析】
-(提炼该卦的核心象意，宏观上代表了一种怎样的客观大环境或发展阶段，字数80字左右)
+【卦辞解析】 (字数限80字)
 【爻辞原文】
-(准确无误的变爻爻辞)
 【爻辞解析】
-(解读该爻位在全卦中的位置、吉凶以及核心变数)
-【战略推演】
-(这是最核心的灵魂部分！必须极度紧密地将【卦辞】的宏观大局、【爻辞】的微观变数与用户的【具体提问】深度缝合！
-请按以下三个层次展开：
-1. 象境映射：明确指出卦象与爻辞中的“意象”对应了用户现实困境中的什么人或事物。
-2. 核心机锋：一针见血地指出用户当前面临的最大盲点或机遇在哪里。
-3. 易鼎定局：给出3条极具实操性的破局策略。不要讲空泛的套话，必须是基于爻辞指导的具体行动指南。
-使用<p>标签分段，核心字词用<strong>加粗，展现出极其深邃、透彻、直击灵魂的高级智库感。)`
+【战略推演】 (将易理与现实融合，<p>分段。)`
                         },
                         { role: "user", content: `卦象：【${name}】，变爻：第 ${line} 爻（确切爻名：${exactLineName}）。问题：${question}` }
                     ]

@@ -13,9 +13,7 @@ export default async function handler(req, res) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_KEY}` },
             body: JSON.stringify({
-                model: "glm-4-flash", 
-                messages: messages, 
-                temperature: 0.4 // 微调温度以增强战略推演的发散深度，同时兼顾原文的客观性
+                model: "glm-4-flash", messages: messages, temperature: 0.3 // 调低温度以确保古文引用的绝对准确性，根除幻觉
             })
         });
 
