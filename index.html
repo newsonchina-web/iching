@@ -9,9 +9,7 @@
     <style>
         :root {
             --bg-dark: #05070a; --text-main: #d1c5b4; --text-dim: #8c857a;
-            --gold: #d4af37; --gold-glow: rgba(212, 175, 55, 0.4);
-            --glass-bg: rgba(15, 20, 25, 0.8);
-            --glass-border: rgba(212, 175, 55, 0.3);
+            --gold: #d4af37; --glass-bg: rgba(15, 20, 25, 0.8); --glass-border: rgba(212, 175, 55, 0.3);
         }
         
         body, html {
@@ -29,31 +27,23 @@
         }
 
         .header { text-align: center; margin-bottom: 40px; margin-top: 2vh; }
-        .header h1 {
-            font-size: 36px; font-weight: normal; letter-spacing: 12px; margin: 0 0 10px 12px;
-            color: var(--gold);
-        }
+        .header h1 { font-size: 36px; font-weight: normal; letter-spacing: 12px; margin: 0 0 10px 12px; color: var(--gold); }
         .header .stamp { font-size: 12px; letter-spacing: 4px; color: var(--text-dim); text-transform: uppercase; font-family: sans-serif; }
 
         .control-panel {
             width: 100%; background: var(--glass-bg); backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border); border-radius: 8px; padding: 30px; box-sizing: border-box;
-            margin-bottom: 40px;
+            border: 1px solid var(--glass-border); border-radius: 8px; padding: 30px; box-sizing: border-box; margin-bottom: 40px;
         }
         
         .input-box {
             width: 100%; padding: 15px 0; border: none; border-bottom: 1px solid rgba(212, 175, 55, 0.4);
-            background: transparent; font-size: 16px; font-family: inherit;
-            text-align: center; color: #fff; outline: none; transition: 0.3s;
-            margin-bottom: 30px; letter-spacing: 1px;
+            background: transparent; font-size: 16px; font-family: inherit; text-align: center; color: #fff; outline: none; transition: 0.3s; margin-bottom: 30px; letter-spacing: 1px;
         }
         .input-box:focus { border-bottom-color: var(--gold); }
-        .input-box::placeholder { color: #5a544d; }
 
         .btn {
             display: block; width: 100%; background: transparent; color: var(--gold); border: 1px solid var(--gold);
-            padding: 15px; font-size: 16px; font-family: inherit; letter-spacing: 8px; text-indent: 8px; border-radius: 4px;
-            cursor: pointer; transition: 0.3s; text-align: center;
+            padding: 15px; font-size: 16px; font-family: inherit; letter-spacing: 8px; text-indent: 8px; border-radius: 4px; cursor: pointer; transition: 0.3s; text-align: center;
         }
         .btn:disabled { color: var(--text-dim); border-color: var(--text-dim); cursor: not-allowed; }
         .btn:hover:not(:disabled) { background: rgba(212, 175, 55, 0.1); }
@@ -82,7 +72,7 @@
             display: none; flex-direction: column; align-items: center;
         }
         
-        .poster-img { width: 100%; height: auto; display: block; }
+        .poster-img { width: 100%; height: auto; display: block; object-fit: cover; }
         
         .poster-content { padding: 40px 50px 60px 50px; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; }
         
@@ -116,8 +106,8 @@
 
 <!-- 海报生成区 -->
 <div id="share-card-template">
-    <!-- 直接嵌入用户指定的图片 -->
-    <img src="hero-bg.jpg" class="poster-img" crossorigin="anonymous" alt="易鼎战略">
+    <!-- 动态加载图片，避免缓存 -->
+    <img id="poster-hero-img" src="" class="poster-img" crossorigin="anonymous" alt="易鼎战略">
     
     <div class="poster-content">
         <div class="poster-gua">
@@ -199,7 +189,6 @@
 </div>
 
 <script>
-    // 星空背景动画
     const canvas = document.getElementById('canvas-bg');
     const ctx = canvas.getContext('2d');
     let width, height, particles;
@@ -240,7 +229,14 @@
             startIndex += startTag.length;
             let endIndex = nextTag ? text.indexOf(nextTag, startIndex) : text.length;
             if (endIndex === -1) endIndex = text.length;
-            let content = text.substring(startIndex, endIndex).trim(); content = content.replace(/\n/g, '<br>'); parsed[key] = content;
+            
+            let content = text.substring(startIndex, endIndex).trim();
+            // 核心修复：强力去除AI可能多输出的“(原文)”或“（原文）”以及多余的换行
+            content = content.replace(/^[(（]原文[)）]/, '').trim(); 
+            content = content.replace(/\n/g, '<br>');
+            // 去除首尾多余的 <br>
+            content = content.replace(/^(<br>)+/, '').replace(/(<br>)+$/, '');
+            parsed[key] = content;
         }
         return parsed;
     }
@@ -269,12 +265,12 @@
                             role: "system", 
                             content: `结合用户问题，对《易经》进行解读。语气平实客观。
 当前抽中：${name}卦，${exactLineName}。
-请按以下格式输出（保留括号）：
-【卦辞】(原文)
-【卦辞解析】(简要解析)
-【爻辞】(原文)
-【爻辞解析】(简要解析)
-【推演】(结合用户问题给出建议，分段说明)`
+请严格按照以下5个标题输出内容，不要在标题后追加“(原文)”等额外字眼，直接输出内容：
+【卦辞】
+【卦辞解析】
+【爻辞】
+【爻辞解析】
+【推演】`
                         },
                         { role: "user", content: `问题：${question}` }
                     ]
@@ -291,9 +287,9 @@
             document.getElementById('hex-title').innerText = name; 
             document.getElementById('hex-line').innerText = exactLineName;
             
-            document.getElementById('gua-ci').innerText = result.gua_ci; 
+            document.getElementById('gua-ci').innerHTML = result.gua_ci; 
             document.getElementById('gua-ci-desc').innerHTML = result.gua_ci_desc;
-            document.getElementById('yao-ci').innerText = result.yao_ci; 
+            document.getElementById('yao-ci').innerHTML = result.yao_ci; 
             document.getElementById('yao-ci-desc').innerHTML = result.yao_ci_desc;
             document.getElementById('strategy-content').innerHTML = result.strategy;
 
@@ -313,12 +309,15 @@
         const btn = document.getElementById('share-btn'); 
         btn.innerText = "生成中..."; btn.disabled = true;
 
+        // 核心修复：每次生成海报时，给图片加个时间戳参数，强制浏览器不使用旧缓存
+        document.getElementById('poster-hero-img').src = 'hero-bg.jpg?t=' + new Date().getTime();
+
         document.getElementById('tmpl-gua-symbol').innerText = currentGuaData.symbol;
         document.getElementById('tmpl-gua-name').innerText = currentGuaData.name;
         document.getElementById('tmpl-yao-name').innerText = currentGuaData.exactLineName;
-        document.getElementById('tmpl-gua-ci').innerText = currentGuaData.gua_ci;
+        document.getElementById('tmpl-gua-ci').innerHTML = currentGuaData.gua_ci;
         document.getElementById('tmpl-gua-ci-desc').innerHTML = currentGuaData.gua_ci_desc;
-        document.getElementById('tmpl-yao-ci').innerText = currentGuaData.yao_ci;
+        document.getElementById('tmpl-yao-ci').innerHTML = currentGuaData.yao_ci;
         document.getElementById('tmpl-yao-ci-desc').innerHTML = currentGuaData.yao_ci_desc;
         document.getElementById('tmpl-strategy-block').innerHTML = currentGuaData.strategy;
 
@@ -332,12 +331,13 @@
         template.style.display = 'flex'; 
 
         try {
-            await new Promise(r => setTimeout(r, 100)); // 等待渲染
+            // 确保图片加载完成后再截图
+            await new Promise(r => setTimeout(r, 500)); 
             const canvas = await html2canvas(template, { scale: 2, useCORS: true, backgroundColor: '#05070a' });
             document.getElementById('final-share-image').src = canvas.toDataURL('image/png');
             document.getElementById('image-modal').style.display = 'flex';
         } catch (e) {
-            alert("生成图片失败，请检查 hero-bg.jpg 是否在同目录下。");
+            alert("生成图片失败，请检查 hero-bg.jpg 是否在同目录下并已正确上传。");
         } finally {
             template.style.display = 'none'; 
             btn.innerText = "生成分享海报"; btn.disabled = false;
