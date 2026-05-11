@@ -87,31 +87,37 @@
 
         .share-control { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(5, 7, 10, 0.95); backdrop-filter: blur(10px); border-top: 1px solid var(--glass-border); padding: 20px; box-sizing: border-box; z-index: 100; display: none; justify-content: center; }
 
-        /* --- V16.2 史诗海报版 --- */
+        /* --- V17 史诗海报生成模板 (基于上传图像融合) --- */
         #share-card-template {
             position: absolute; left: -9999px; top: -9999px; 
             width: 800px; 
-            padding: 70px 50px 60px 50px; 
-            background: linear-gradient(180deg, #020305 0%, #0d131f 40%, #05070a 100%);
+            background: #05070a;
             color: #d1c5b4; border: 1px solid #3a3225; display: none; flex-direction: column; align-items: center; overflow: hidden;
         }
         
-        .texture-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.08"/></svg>'); pointer-events: none; z-index: 1; }
+        /* 顶部神级头图区域，底部消隐入黑 */
+        .tmpl-hero-banner {
+            width: 100%;
+            height: 480px; /* 控制高度，恰好裁剪掉原图底部的假二维码 */
+            background-image: url('hero-bg.jpg'); /* 调用您上传的神作 */
+            background-size: cover;
+            background-position: center top; /* 图像从顶部对齐对齐 */
+            position: relative;
+        }
         
-        .tmpl-content-wrapper { position: relative; z-index: 2; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        /* 融合遮罩：让图像底部极其平滑地过渡到海报深色背景 */
+        .tmpl-hero-banner::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 200px;
+            background: linear-gradient(to bottom, transparent, #05070a);
+        }
 
-        /* 顶部史诗视觉：左文王、右硅基、中太极 */
-        .tmpl-hero-banner { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 30px; position: relative; padding: 0 20px;}
-        .hero-side { width: 180px; display: flex; flex-direction: column; align-items: center; opacity: 0.9; }
-        .hero-svg { width: 120px; height: 120px; margin-bottom: 15px; filter: drop-shadow(0 0 15px rgba(212,175,55,0.3)); }
-        
-        .hero-center { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
-        .hero-center::before { content: ''; position: absolute; top: 50%; left: -80px; right: -80px; height: 2px; background: linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent); z-index: -1; transform: translateY(-50%); }
-        .tmpl-taiji-icon { font-size: 130px; color: #8e291c; line-height: 1; text-shadow: 0 0 50px rgba(142,41,28,0.8); filter: drop-shadow(0 0 25px rgba(212,175,55,0.4)); background: #05070a; border-radius: 50%; box-shadow: 0 0 40px #05070a; }
-
-        .tmpl-header { text-align: center; margin-bottom: 40px; width: 100%; }
-        .tmpl-title { font-family: "Noto Serif SC", serif; font-size: 68px; letter-spacing: 28px; margin: 0 0 15px 28px; color: #fff; text-shadow: 0 0 40px rgba(212,175,55,0.7); font-weight: bold;}
-        .tmpl-slogan { font-size: 22px; color: #d4af37; letter-spacing: 14px; font-family: sans-serif; text-transform: uppercase; margin-left: 14px;}
+        .tmpl-content-wrapper { 
+            position: relative; z-index: 2; width: 100%; display: flex; flex-direction: column; align-items: center; 
+            padding: 0 50px 60px 50px;
+            margin-top: -60px; /* 向上微调，使得内容卡片部分陷入在渐变黑雾中，极具层次感 */
+        }
 
         .tmpl-gua-info { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
         .tmpl-gua-symbol { font-size: 80px; font-family: serif; color: #d4af37; line-height: 1; margin-bottom: 10px; text-shadow: 0 0 30px rgba(212,175,55,0.5);}
@@ -131,7 +137,7 @@
         .tmpl-strat-content p { margin-bottom: 1.2em; }
         .tmpl-strat-content strong { color: #d4af37; font-weight: normal; border-bottom: 1px solid #d4af37; padding-bottom: 2px;}
 
-        /* 底部定向二维码 */
+        /* 底部真实定向二维码 */
         .tmpl-footer-qr { width: 100%; display: flex; flex-direction: column; align-items: center; border-top: 1px solid rgba(212,175,55,0.3); padding-top: 40px; }
         .qr-frame { padding: 15px; border: 2px solid #d4af37; border-radius: 6px; background: #fff; position: relative; margin-bottom: 20px; box-shadow: 0 0 40px rgba(212,175,55,0.3); }
         .qr-frame::before, .qr-frame::after { content: ''; position: absolute; width: 25px; height: 25px; border-color: #d4af37; border-style: solid; }
@@ -155,42 +161,10 @@
 <canvas id="canvas-bg"></canvas>
 
 <div id="share-card-template">
-    <div class="texture-overlay"></div>
+    
+    <div class="tmpl-hero-banner"></div>
+
     <div class="tmpl-content-wrapper">
-        
-        <div class="tmpl-hero-banner">
-            <div class="hero-side">
-                <svg class="hero-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="46" stroke="#d4af37" stroke-width="2" stroke-dasharray="6 4" opacity="0.9"/>
-                    <rect x="28" y="25" width="8" height="50" rx="2" stroke="#d4af37" stroke-width="2" fill="rgba(212,175,55,0.1)"/>
-                    <rect x="46" y="18" width="8" height="64" rx="2" stroke="#d4af37" stroke-width="2" fill="rgba(212,175,55,0.3)"/>
-                    <rect x="64" y="25" width="8" height="50" rx="2" stroke="#d4af37" stroke-width="2" fill="rgba(212,175,55,0.1)"/>
-                    <path d="M 20 40 L 80 40 M 20 60 L 80 60" stroke="#d4af37" stroke-width="1.5" opacity="0.8"/>
-                </svg>
-                <div style="font-size:18px; color:#d4af37; font-weight:bold; letter-spacing:4px;">易经原典</div>
-            </div>
-            
-            <div class="hero-center">
-                <div class="tmpl-taiji-icon">☯</div>
-            </div>
-
-            <div class="hero-side">
-                <svg class="hero-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 50 6 L 90 28 L 90 72 L 50 94 L 10 72 L 10 28 Z" stroke="#d4af37" stroke-width="2" fill="rgba(212,175,55,0.05)"/>
-                    <circle cx="50" cy="50" r="26" stroke="#d4af37" stroke-width="2" stroke-dasharray="2 6"/>
-                    <path d="M 50 24 L 50 6 M 76 50 L 90 50 M 50 76 L 50 94 M 24 50 L 10 50" stroke="#d4af37" stroke-width="2" opacity="0.9"/>
-                    <circle cx="50" cy="50" r="8" fill="#d4af37"/>
-                    <circle cx="50" cy="50" r="3" fill="#fff"/>
-                </svg>
-                <div style="font-size:18px; color:#d4af37; font-weight:bold; letter-spacing:4px;">高能算力</div>
-            </div>
-        </div>
-
-        <div class="tmpl-header">
-            <h2 class="tmpl-title">易鼎战略</h2>
-            <div class="tmpl-slogan">一窥天演，智定鼎局。</div>
-        </div>
-        
         <div class="tmpl-gua-info">
             <div class="tmpl-gua-symbol" id="tmpl-gua-symbol">䷀</div>
             <div class="tmpl-gua-name" id="tmpl-gua-name">乾为天</div>
