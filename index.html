@@ -9,129 +9,162 @@
     <style>
         :root {
             --bg-dark: #05070a; --text-main: #d1c5b4; --text-dim: #8c857a;
-            --gold: #d4af37; --glass-bg: rgba(15, 20, 25, 0.8); --glass-border: rgba(212, 175, 55, 0.3);
+            --gold: #d4af37; --gold-glow: rgba(212, 175, 55, 0.4);
+            --red: #8e291c;
+            --glass-bg: rgba(15, 20, 25, 0.85); --glass-border: rgba(212, 175, 55, 0.3);
         }
         
         body, html {
             margin: 0; padding: 0; width: 100%; min-height: 100vh;
             background-color: var(--bg-dark); font-family: "Noto Serif SC", STSong, "Source Han Serif SC", serif;
-            color: var(--text-main); overflow-x: hidden; display: flex; justify-content: center; align-items: flex-start;
+            color: var(--text-main); overflow-x: hidden;
         }
 
         #canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 
         .wrapper {
-            position: relative; z-index: 10; max-width: 640px; width: 100%;
-            padding: 40px 20px 120px 20px; box-sizing: border-box;
+            position: relative; z-index: 10; max-width: 640px; width: 100%; margin: 0 auto;
+            padding: 50px 20px 150px 20px; box-sizing: border-box;
             display: flex; flex-direction: column; align-items: center;
         }
 
-        .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { font-size: 38px; font-weight: normal; letter-spacing: 14px; margin: 0 0 10px 14px; color: var(--gold); }
-        .header .stamp { font-size: 12px; letter-spacing: 6px; color: var(--text-dim); }
+        .header { text-align: center; margin-bottom: 60px; }
+        .header h1 { font-size: 42px; font-weight: 300; letter-spacing: 16px; margin: 0 0 15px 16px; color: var(--gold); text-shadow: 0 0 30px var(--gold-glow); }
+        .header .stamp { font-size: 13px; letter-spacing: 8px; color: var(--text-dim); text-transform: uppercase; }
 
         .control-panel {
-            width: 100%; background: var(--glass-bg); backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border); border-radius: 8px; padding: 30px; box-sizing: border-box; margin-bottom: 40px;
+            width: 100%; background: var(--glass-bg); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 4px; padding: 40px 30px; box-sizing: border-box;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8); margin-bottom: 50px;
         }
         
         .input-box {
-            width: 100%; padding: 15px 0; border: none; border-bottom: 1px solid rgba(212, 175, 55, 0.4);
-            background: transparent; font-size: 16px; font-family: inherit; text-align: center; color: #fff; outline: none; margin-bottom: 30px;
+            width: 100%; padding: 18px 0; border: none; border-bottom: 1px solid rgba(212, 175, 55, 0.4);
+            background: transparent; font-size: 18px; font-family: inherit; text-align: center; color: #fff; outline: none; margin-bottom: 40px; transition: 0.4s;
         }
-        .input-box:focus { border-bottom-color: var(--gold); }
+        .input-box:focus { border-bottom-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
 
         .btn {
             display: block; width: 100%; background: transparent; color: var(--gold); border: 1px solid var(--gold);
-            padding: 15px; font-size: 16px; letter-spacing: 8px; text-indent: 8px; border-radius: 4px; cursor: pointer; transition: 0.3s;
+            padding: 18px; font-size: 18px; letter-spacing: 10px; text-indent: 10px; border-radius: 2px; cursor: pointer; transition: 0.5s;
         }
-        .btn:hover:not(:disabled) { background: rgba(212, 175, 55, 0.1); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+        .btn:hover { background: rgba(212, 175, 55, 0.1); box-shadow: 0 0 30px var(--gold-glow); }
 
-        .result-panel { width: 100%; display: none; margin-bottom: 50px;}
-        .card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 4px; padding: 25px; margin-bottom: 20px; }
-        .card-title { font-size: 16px; color: var(--gold); margin-bottom: 15px; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 10px; }
-        .classic-quote { font-size: 18px; color: #fff; margin-bottom: 10px; }
-        .strategy-content { font-size: 16px; color: var(--text-main); line-height: 2; text-align: justify; }
+        /* 结果展示区 */
+        .result-panel { width: 100%; display: none; animation: fadeIn 1s forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 海报模板布局 */
+        .gua-display { text-align: center; margin-bottom: 50px; }
+        .gua-symbol { font-size: 140px; line-height: 1; color: var(--gold); margin-bottom: 15px; text-shadow: 0 0 40px var(--gold-glow); }
+        .gua-name { font-size: 32px; color: #fff; letter-spacing: 10px; margin-bottom: 10px; font-weight: bold; }
+        .gua-details { font-size: 16px; color: var(--gold); letter-spacing: 4px; }
+
+        .card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 35px; margin-bottom: 30px; position: relative; }
+        .card-title { font-size: 14px; color: var(--gold); margin-bottom: 20px; letter-spacing: 4px; text-transform: uppercase; border-left: 3px solid var(--gold); padding-left: 15px; }
+        .classic-quote { font-size: 22px; color: #fff; margin-bottom: 15px; line-height: 1.5; font-weight: bold;}
+        .classic-explain { font-size: 17px; color: var(--text-dim); line-height: 1.9; text-align: justify; }
+        .strategy-content { font-size: 18px; color: var(--text-main); line-height: 2.2; text-align: justify; }
+        .strategy-content strong { color: var(--gold); font-weight: normal; border-bottom: 1px solid var(--gold); }
+
+        .status-box { text-align: center; color: var(--gold); font-size: 14px; letter-spacing: 2px; margin-top: -30px; margin-bottom: 40px; display: none; }
+
+        .share-control { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(5, 7, 10, 0.95); border-top: 1px solid var(--glass-border); padding: 25px; box-sizing: border-box; z-index: 100; display: none; justify-content: center; backdrop-filter: blur(10px); }
+
+        /* 海报模板 - 极致视觉重构 */
         #share-card-template {
             position: absolute; left: -9999px; top: -9999px; 
-            width: 800px; background: #05070a; color: #d1c5b4; 
+            width: 850px; background: #05070a; color: #d1c5b4; 
             display: none; flex-direction: column; align-items: center;
         }
         
         .poster-hero { width: 100%; height: auto; display: block; }
-        .poster-body { padding: 50px 60px; width: 100%; box-sizing: border-box; }
         
-        .poster-header { text-align: center; margin-bottom: 40px; }
-        .poster-title { font-size: 60px; letter-spacing: 24px; color: #fff; margin-bottom: 10px; font-weight: bold; }
-        .poster-sub { font-size: 22px; color: #d4af37; letter-spacing: 10px; margin-bottom: 20px;}
+        /* 在神图之上悬浮巨大的卦象图腾 */
+        .poster-hero-wrap { position: relative; width: 100%; }
+        .poster-floating-gua {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 220px; color: rgba(212, 175, 55, 0.15); /* 淡淡的半透明金色 */
+            text-shadow: 0 0 50px rgba(212, 175, 55, 0.4);
+            pointer-events: none;
+        }
+
+        .poster-body { padding: 60px 70px; width: 100%; box-sizing: border-box; }
+        .poster-header { text-align: center; margin-bottom: 50px; }
+        .poster-title { font-size: 72px; letter-spacing: 32px; color: #fff; margin-bottom: 15px; font-weight: bold; text-shadow: 0 0 40px rgba(212,175,55,0.5); margin-left: 32px;}
         
-        .poster-gua-section { text-align: center; margin-bottom: 40px; border-top: 1px solid rgba(212,175,55,0.2); border-bottom: 1px solid rgba(212,175,55,0.2); padding: 30px 0;}
-        .poster-gua-name { font-size: 36px; color: #fff; letter-spacing: 8px; margin-bottom: 10px;}
-        .poster-gua-yao { font-size: 20px; color: #d4af37; }
+        .poster-gua-row { display: flex; align-items: center; justify-content: center; gap: 40px; margin-bottom: 50px; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 40px;}
+        .p-gua-symbol { font-size: 120px; color: var(--gold); line-height: 1; }
+        .p-gua-info { text-align: left; }
+        .p-gua-name { font-size: 48px; color: #fff; font-weight: bold; letter-spacing: 12px; margin-bottom: 10px;}
+        .p-gua-yao { font-size: 24px; color: var(--gold); letter-spacing: 6px; }
 
-        .poster-box { width: 100%; border: 1px solid rgba(212,175,55,0.3); padding: 35px; margin-bottom: 30px; background: rgba(20,25,35,0.5); }
-        .poster-box-label { font-size: 18px; color: #d4af37; margin-bottom: 15px; font-weight: bold; text-transform: uppercase; border-left: 4px solid #d4af37; padding-left: 15px;}
-        .poster-quote-text { font-size: 22px; color: #fff; margin-bottom: 15px; line-height: 1.6; }
-        .poster-main-text { font-size: 19px; color: #e6dfd3; line-height: 2; text-align: justify; }
+        .poster-box { width: 100%; border: 1px solid rgba(212,175,55,0.25); padding: 45px; margin-bottom: 40px; background: rgba(20,25,35,0.4); }
+        .poster-box-label { font-size: 20px; color: var(--gold); margin-bottom: 25px; font-weight: bold; border-left: 5px solid var(--gold); padding-left: 20px;}
+        .poster-text-quote { font-size: 26px; color: #fff; margin-bottom: 20px; line-height: 1.6; font-weight: bold; }
+        .poster-text-main { font-size: 22px; color: #e6dfd3; line-height: 2.1; text-align: justify; }
 
-        .poster-footer { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding-top: 40px; border-top: 2px solid #d4af37; }
-        .footer-left { display: flex; flex-direction: column; align-items: flex-start; }
-        .footer-slogan { font-size: 22px; color: #fff; letter-spacing: 4px; margin-bottom: 10px; font-weight: bold;}
-        .footer-url { font-size: 16px; color: #d4af37; font-family: sans-serif; }
+        .poster-footer { width: 100%; display: flex; justify-content: space-between; align-items: flex-end; margin-top: 40px; padding-top: 50px; border-top: 2px solid var(--gold); }
+        .f-left { display: flex; flex-direction: column; }
+        .f-slogan-big { font-size: 28px; color: #fff; letter-spacing: 6px; font-weight: bold; margin-bottom: 10px; }
+        .f-slogan-sub { font-size: 18px; color: var(--text-dim); margin-bottom: 15px; }
+        .f-url { font-size: 18px; color: var(--gold); font-family: monospace; }
         
-        .qr-box { padding: 12px; background: #fff; border-radius: 4px; box-shadow: 0 0 20px rgba(212,175,55,0.3); }
-        .qr-canvas { width: 140px !important; height: 140px !important; display: block; }
+        .qr-container { padding: 15px; background: #fff; border-radius: 4px; box-shadow: 0 0 30px rgba(212,175,55,0.4); }
+        .qr-canvas { width: 160px !important; height: 160px !important; display: block; }
 
-        #image-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; display: none; justify-content: center; align-items: center; }
-        .modal-content { max-width: 90%; max-height: 90%; display: flex; flex-direction: column; align-items: center; }
-        #final-share-image { max-width: 100%; max-height: 85vh; border: 1px solid var(--gold); }
-        .close-modal-btn { position: absolute; top: -50px; right: 0; color: #fff; background: none; border: 1px solid #fff; padding: 5px 15px; cursor: pointer; }
+        #image-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; display: none; justify-content: center; align-items: center; }
+        .modal-wrap { max-width: 90%; max-height: 95%; display: flex; flex-direction: column; align-items: center; position: relative; }
+        #final-share-image { max-width: 100%; max-height: 85vh; border: 1px solid var(--gold); box-shadow: 0 0 50px rgba(0,0,0,1); }
+        .modal-close { position: absolute; top: -50px; right: 0; color: #fff; background: none; border: 1px solid #fff; padding: 8px 20px; cursor: pointer; border-radius: 4px; }
     </style>
 </head>
 <body>
 
 <canvas id="canvas-bg"></canvas>
 
-<!-- 史诗海报模板 -->
 <div id="share-card-template">
-    <img id="poster-hero-img" src="" class="poster-hero" crossorigin="anonymous">
+    <div class="poster-hero-wrap">
+        <img id="poster-hero-img" src="" class="poster-hero" crossorigin="anonymous">
+        <div class="poster-floating-gua" id="poster-floating-gua">䷀</div>
+    </div>
+    
     <div class="poster-body">
         <div class="poster-header">
             <div class="poster-title">易鼎戰略</div>
-            <div class="poster-sub">YIDING STRATEGY · 东方战略智库</div>
         </div>
 
-        <div class="poster-gua-section">
-            <div class="poster-gua-name" id="tmpl-gua-name">兑为泽</div>
-            <div class="poster-gua-yao" id="tmpl-yao-name">爻位：初九</div>
+        <div class="poster-gua-row">
+            <div class="p-gua-symbol" id="p-gua-symbol">䷀</div>
+            <div class="p-gua-info">
+                <div class="p-gua-name" id="p-gua-name">乾为天</div>
+                <div class="p-gua-yao" id="p-gua-yao">爻位：初九</div>
+            </div>
         </div>
 
         <div class="poster-box">
-            <div class="poster-box-label">大局 · 卦辞</div>
-            <div class="poster-quote-text" id="tmpl-gua-ci"></div>
-            <div class="poster-main-text" id="tmpl-gua-ci-desc"></div>
+            <div class="poster-box-label">易理 · 宏观大局</div>
+            <div class="poster-text-quote" id="tmpl-gua-ci"></div>
+            <div class="poster-text-main" id="tmpl-gua-ci-desc"></div>
         </div>
         
         <div class="poster-box">
-            <div class="poster-box-label">变数 · 爻辞</div>
-            <div class="poster-quote-text" id="tmpl-yao-ci"></div>
-            <div class="poster-main-text" id="tmpl-yao-ci-desc"></div>
+            <div class="poster-box-label">象辞 · 微观变数</div>
+            <div class="poster-text-quote" id="tmpl-yao-ci"></div>
+            <div class="poster-text-main" id="tmpl-yao-ci-desc"></div>
         </div>
         
-        <div class="poster-box" style="border-color: #d4af37; background: rgba(212,175,55,0.05);">
-            <div class="poster-box-label" style="background: #d4af37; color: #000; padding-right: 10px;">降维定局推演</div>
-            <div class="poster-main-text" id="tmpl-strategy-block"></div>
+        <div class="poster-box" style="border-width: 2px; border-color: var(--gold); background: rgba(212,175,55,0.06);">
+            <div class="poster-box-label" style="background: var(--gold); color: #000; padding: 5px 20px; border:none; display:inline-block; margin-left:-45px;">降维定局战略</div>
+            <div class="poster-text-main" id="tmpl-strategy-block" style="color:#fff; font-weight: bold;"></div>
         </div>
 
         <div class="poster-footer">
-            <div class="footer-left">
-                <div class="footer-slogan">一窥天演，智定鼎局。</div>
-                <div class="footer-slogan" style="font-size:16px; color:#8c857a; font-weight:normal;">链接高维智慧 · 掌控绝对变局</div>
-                <div class="footer-url">www.yishu-strategy.com</div>
+            <div class="f-left">
+                <div class="f-slogan-big">一窥天演，智定鼎局。</div>
+                <div class="f-slogan-sub">链接高维智慧 · 掌控绝对变局</div>
+                <div class="f-url">www.yishu-strategy.com</div>
             </div>
-            <div class="qr-box">
+            <div class="qr-container">
                 <canvas id="tmpl-qrcode-canvas" class="qr-canvas"></canvas>
             </div>
         </div>
@@ -139,70 +172,81 @@
 </div>
 
 <div id="image-modal">
-    <div class="modal-content">
-        <button class="close-modal-btn" onclick="closeModal()">关闭</button>
+    <div class="modal-wrap">
+        <button class="modal-close" onclick="closeModal()">关闭预览</button>
         <img src="" id="final-share-image">
-        <p style="color:#d4af37; margin-top:15px;">长按上方海报，保存并开启定局</p>
+        <p style="color:var(--gold); margin-top:20px; letter-spacing:2px; font-weight:bold;">长按海报保存 · 开启你的绝对胜局</p>
     </div>
 </div>
 
 <div class="wrapper">
     <div class="header">
         <h1>易鼎战略</h1>
-        <div class="stamp">YIDING STRATEGY</div>
+        <div class="stamp">YIDING STRATEGY · 东方战略智库</div>
     </div>
+    
     <div class="control-panel">
-        <input type="text" id="user-question" class="input-box" placeholder="写下您的当下困局..." autocomplete="off">
+        <input type="text" id="user-question" class="input-box" placeholder="写下您当下面临的困局或抉择..." autocomplete="off">
         <button class="btn" id="submit-btn" onclick="castAndAnalyze()">凝神起卦</button>
     </div>
-    <div id="status-box" class="status-msg"></div>
+    
+    <div id="status-box" class="status-box"></div>
+
     <div id="result-panel" class="result-panel">
         <div class="gua-display">
             <div class="gua-symbol" id="hex-symbol">䷀</div>
             <div class="gua-name" id="hex-title"></div>
             <div class="gua-details" id="hex-line"></div>
         </div>
+        
         <div class="card">
-            <div class="card-title">大局 · 卦辞</div>
+            <div class="card-title">宏观 · 卦辞原文</div>
             <div class="classic-quote" id="gua-ci"></div>
             <div class="classic-explain" id="gua-ci-desc"></div>
         </div>
+        
         <div class="card">
-            <div class="card-title">变数 · 爻辞</div>
+            <div class="card-title">微观 · 变爻原文</div>
             <div class="classic-quote" id="yao-ci"></div>
             <div class="classic-explain" id="yao-ci-desc"></div>
         </div>
-        <div class="card" style="border-color: #d4af37;">
-            <div class="card-title" style="background: #d4af37; color: #000; padding: 5px 10px;">智道 · 战略推演</div>
+        
+        <div class="card" style="border-width: 2px; border-color: var(--gold);">
+            <div class="card-title" style="background: var(--gold); color: #000; padding: 5px 15px; border:none; display:inline-block;">智道 · 定局推演</div>
             <div class="strategy-content" id="strategy-content"></div>
         </div>
     </div>
 </div>
 
 <div class="share-control" id="share-control">
-    <button class="btn" onclick="generateShareImage()">生成智道定局海报</button>
+    <button class="btn" onclick="generateShareImage()">熔铸乾坤定局海报</button>
 </div>
 
 <script>
+    // 粒子效果
     const canvas = document.getElementById('canvas-bg');
     const ctx = canvas.getContext('2d');
-    let width, height, particles;
+    let width, height, dots;
     function initCanvas() {
-        width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; particles = [];
-        for (let i = 0; i < 40; i++) {
-            particles.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.1, vy: (Math.random() - 0.5) * 0.1, size: Math.random() * 2, alpha: Math.random() * 0.5 });
+        width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; dots = [];
+        for (let i = 0; i < 60; i++) {
+            dots.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.15, vy: (Math.random() - 0.5) * 0.15, r: Math.random() * 2 });
         }
     }
-    function animate() {
+    function draw() {
         ctx.fillStyle = '#05070a'; ctx.fillRect(0, 0, width, height);
-        for (let p of particles) {
-            p.x += p.vx; p.y += p.vy;
-            if (p.x < 0 || p.x > width) p.vx = -p.vx; if (p.y < 0 || p.y > height) p.vy = -p.vy;
-            ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fillStyle = `rgba(212, 175, 55, ${p.alpha})`; ctx.fill();
+        for (let i = 0; i < dots.length; i++) {
+            let d = dots[i]; d.x += d.vx; d.y += d.vy;
+            if (d.x < 0 || d.x > width) d.vx *= -1; if (d.y < 0 || d.y > height) d.vy *= -1;
+            ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2); ctx.fillStyle = 'rgba(212, 175, 55, 0.6)'; ctx.fill();
+            for (let j = i + 1; j < dots.length; j++) {
+                let d2 = dots[j]; let dist = Math.hypot(d.x - d2.x, d.y - d2.y);
+                if (dist < 150) { ctx.beginPath(); ctx.moveTo(d.x, d.y); ctx.lineTo(d2.x, d2.y); ctx.strokeStyle = `rgba(212, 175, 55, ${0.15 - dist/1000})`; ctx.stroke(); }
+            }
         }
-        requestAnimationFrame(animate);
+        requestAnimationFrame(draw);
     }
-    window.addEventListener('resize', initCanvas); initCanvas(); animate();
+    window.addEventListener('resize', initCanvas); initCanvas(); draw();
 
     const hexagrams = ["乾为天", "坤为地", "水雷屯", "山水蒙", "水天需", "天水讼", "地水师", "水地比", "风天小畜", "天泽履", "地天泰", "天地否", "天火同人", "火天大有", "地山谦", "雷地豫", "泽雷随", "山风蛊", "地泽临", "风地观", "火雷噬嗑", "山火贲", "山地剥", "地雷复", "天雷无妄", "山天大畜", "山雷颐", "泽风大过", "坎为水", "离为火", "泽山咸", "雷风恒", "天山遁", "雷天大壮", "火地晋", "地火明夷", "风火家人", "火泽睽", "水山蹇", "雷水解", "山泽损", "风雷益", "泽天夬", "天风姤", "泽地萃", "地风升", "泽水困", "水风井", "泽火革", "火风鼎", "震为雷", "艮为山", "风山渐", "雷泽归妹", "雷火丰", "火山旅", "巽为风", "兑为泽", "风水涣", "水泽节", "风泽中孚", "雷山小过", "水火既济", "火水未济"];
     const hexagramBinaries = ["111111", "000000", "100010", "010001", "111010", "010111", "010000", "000010", "111011", "110111", "111000", "000111", "101111", "111101", "001000", "000100", "100110", "011001", "110000", "000011", "100101", "101001", "000001", "100000", "100111", "111001", "100001", "011110", "010010", "101101", "001110", "011100", "001111", "111100", "000101", "101000", "101011", "110101", "001010", "010100", "110001", "100011", "111110", "011111", "000110", "011000", "010110", "011010", "101110", "011101", "100100", "001001", "001011", "110100", "101100", "001101", "011011", "110110", "010011", "110010", "110011", "001100", "101010", "010101"];
@@ -224,8 +268,7 @@
             startIndex += startTag.length;
             let endIndex = nextTag ? text.indexOf(nextTag, startIndex) : text.length;
             if (endIndex === -1) endIndex = text.length;
-            let content = text.substring(startIndex, endIndex).trim().replace(/\n/g, '<br>');
-            parsed[key] = content;
+            parsed[key] = text.substring(startIndex, endIndex).trim().replace(/\n/g, '<br>');
         }
         return parsed;
     }
@@ -236,9 +279,9 @@
         const question = document.getElementById('user-question').value;
         if (!question.trim()) { alert("请写下您的困局。"); return; }
         const btn = document.getElementById('submit-btn');
-        btn.innerText = "高维算力跃迁中..."; btn.disabled = true;
+        btn.innerText = "正在链接高维智慧..."; btn.disabled = true;
         document.getElementById('status-box').style.display = 'block';
-        document.getElementById('status-box').innerText = "硅基引擎启动，正在交汇中西顶尖哲思，推演现实定局...";
+        document.getElementById('status-box').innerText = "太极流转，算力正在交汇古今哲思，推演天演之变...";
 
         const index = Math.floor(Math.random() * 64); const name = hexagrams[index]; const line = Math.floor(Math.random() * 6) + 1; 
         const symbol = String.fromCodePoint(0x4DC0 + index); const exactLineName = getLineName(hexagramBinaries[index], line);
@@ -251,19 +294,17 @@
                     messages: [
                         { 
                             role: "system", 
-                            content: `你是一位融合了《周易》象数与全球顶尖战略思想的超级智库大脑。
-你的思想库不仅包含：东方古典智慧（老庄天道、王阳明心学、孙子兵法）、西方经典（斯多葛学派、彼得·德鲁克现代管理），更深度融合了当代顶尖商业与科技领袖的底层逻辑：瑞·达利欧（Ray Dalio）的机器与原则周期、纳瓦尔（Naval Ravikant）的财富与杠杆原理、埃隆·马斯克（Elon Musk）的第一性原理、史蒂夫·乔布斯（Steve Jobs）的极致聚焦。
+                            content: `你是一位融合了《周易》正统卦理与全球顶级战略视野的决策大脑。
+解读原则：必须以易经的象数理为“经（准绳）”，以中西方思想家（王阳明、马斯克、达利欧、德鲁克、纳瓦尔、老庄、乔布斯等）的思想为“纬（佐证）”。
 
-你的解读必须极度深邃、冷峻、直击本质。严禁使用玄乎的算命套话或直白浅显的废话。
-
-输出格式要求（严禁多余的标点或寒暄，严格按5个【】标题输出）：
-【卦辞】(输出原文)
-【卦辞解析】(解析大局。必须引入达利欧的宏观周期或德鲁克的系统效能等现代视角来解构大环境)
-【爻辞】(输出原文)
-【爻辞解析】(解析当前变数。必须引入王阳明心学、马斯克的第一性原理或乔布斯的聚焦等微观/个人视角进行剖析)
-【战略定局】(这是灵魂！结合用户具体问题，给出3条极具实操性的降维打击策略。在策略中，必须明确点名并化用上述至少2位中外顶尖思想家（如纳瓦尔的杠杆、马斯克的物理学思维、老庄的顺势等）的核心理念，指出破局的最优解。)`
+输出要求：
+1. 【卦辞】(原文)
+2. 【卦辞解析】(基于易经大局，适当化用达利欧周期论或德鲁克系统观进行宏观解构)
+3. 【爻辞】(原文)
+4. 【爻辞解析】(基于变爻位置，化用心学知行合一或马斯克第一性原理分析当前变数)
+5. 【战略定局】(灵魂部分。结合问题给出3条斩钉截铁的策略。必须点名借鉴至少两位上述思想家，核心字词用<strong>加粗，展现降维打击的洞察力。)`
                         },
-                        { role: "user", content: `卦象：${name}卦，爻位：${exactLineName}。问题：${question}` }
+                        { role: "user", content: `抽中卦象：${name}卦，爻位：${exactLineName}。问题：${question}` }
                     ]
                 })
             });
@@ -287,7 +328,7 @@
             document.getElementById('result-panel').scrollIntoView({ behavior: 'smooth' });
 
         } catch (e) {
-            alert("智道网络暂时中断，请重新起卦。");
+            alert("高维网络波动，请再次凝神起卦。");
         } finally {
             btn.innerText = "凝神起卦"; btn.disabled = false;
         }
@@ -299,9 +340,10 @@
         btn.innerText = "符文熔铸中..."; btn.disabled = true;
 
         document.getElementById('poster-hero-img').src = 'hero-bg.jpg?v=' + Date.now();
-        
-        document.getElementById('tmpl-gua-name').innerText = currentGuaData.name;
-        document.getElementById('tmpl-yao-name').innerText = `爻位：${currentGuaData.exactLineName}`;
+        document.getElementById('poster-floating-gua').innerText = currentGuaData.symbol;
+        document.getElementById('p-gua-symbol').innerText = currentGuaData.symbol;
+        document.getElementById('p-gua-name').innerText = currentGuaData.name;
+        document.getElementById('p-gua-yao').innerText = `爻位：${currentGuaData.exactLineName}`;
         document.getElementById('tmpl-gua-ci').innerHTML = currentGuaData.gua_ci;
         document.getElementById('tmpl-gua-ci-desc').innerHTML = currentGuaData.gua_ci_desc;
         document.getElementById('tmpl-yao-ci').innerHTML = currentGuaData.yao_ci;
@@ -309,7 +351,7 @@
         document.getElementById('tmpl-strategy-block').innerHTML = currentGuaData.strategy;
 
         try {
-            await QRCode.toCanvas(document.getElementById('tmpl-qrcode-canvas'), 'https://www.yishu-strategy.com/', { width: 140, margin: 1 });
+            await QRCode.toCanvas(document.getElementById('tmpl-qrcode-canvas'), 'https://www.yishu-strategy.com/', { width: 160, margin: 1 });
         } catch (err) {}
 
         const template = document.getElementById('share-card-template');
@@ -321,10 +363,10 @@
             document.getElementById('final-share-image').src = canvas.toDataURL('image/png');
             document.getElementById('image-modal').style.display = 'flex';
         } catch (e) {
-            alert("生成失败，请确保 hero-bg.jpg 已上传至根目录。");
+            alert("生成失败，请检查 hero-bg.jpg。");
         } finally {
             template.style.display = 'none'; 
-            btn.innerText = "生成智道定局海报"; btn.disabled = false;
+            btn.innerText = "熔铸乾坤定局海报"; btn.disabled = false;
         }
     }
     function closeModal() { document.getElementById('image-modal').style.display = 'none'; }

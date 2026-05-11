@@ -13,13 +13,13 @@ export default async function handler(req, res) {
                 model: "glm-4-flash", 
                 messages: messages, 
                 temperature: 0.6, 
-                max_tokens: 1200 
+                max_tokens: 1500 
             })
         });
 
         const data = await response.json();
         return res.status(200).json(data);
     } catch (error) {
-        return res.status(500).json({ error: { message: 'Cloud connectivity error' } });
+        return res.status(500).json({ error: { message: 'Network transmission error' } });
     }
 }
