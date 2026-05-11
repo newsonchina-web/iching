@@ -87,72 +87,72 @@
 
         .share-control { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(5, 7, 10, 0.95); backdrop-filter: blur(10px); border-top: 1px solid var(--glass-border); padding: 20px; box-sizing: border-box; z-index: 100; display: none; justify-content: center; }
 
-        /* --- V17 史诗海报生成模板 (基于上传图像融合) --- */
+        /* --- V17 巅峰美学全要素分享符文卡片 (纠错史诗版) --- */
         #share-card-template {
             position: absolute; left: -9999px; top: -9999px; 
             width: 800px; 
-            background: #05070a;
-            color: #d1c5b4; border: 1px solid #3a3225; display: none; flex-direction: column; align-items: center; overflow: hidden;
+            padding: 80px 70px 60px 70px; 
+            background: linear-gradient(135deg, #05070a 0%, #111522 50%, #05070a 100%);
+            color: #d1c5b4; border: 2px solid #3a3225; display: none; flex-direction: column; align-items: center; overflow: hidden;
         }
         
-        /* 顶部神级头图区域，底部消隐入黑 */
-        .tmpl-hero-banner {
-            width: 100%;
-            height: 480px; /* 控制高度，恰好裁剪掉原图底部的假二维码 */
-            background-image: url('hero-bg.jpg'); /* 调用您上传的神作 */
-            background-size: cover;
-            background-position: center top; /* 图像从顶部对齐对齐 */
-            position: relative;
-        }
+        /* 融合賽博新中式核心美學：玄色深空背景，配合香槟金粒子和朱砂红光晕 */
+        .texture-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 50% 20%, #1a2235 0%, transparent 60%), radial-gradient(circle at 30% 60%, rgba(142,41,28,0.06) 0%, transparent 50%), url('data:image/svg+xml;utf8,<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.08"/></svg>'); pointer-events: none; z-index: 1; }
         
-        /* 融合遮罩：让图像底部极其平滑地过渡到海报深色背景 */
-        .tmpl-hero-banner::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; width: 100%; height: 200px;
-            background: linear-gradient(to bottom, transparent, #05070a);
-        }
+        .tmpl-content-wrapper { position: relative; z-index: 2; width: 100%; display: flex; flex-direction: column; align-items: center; }
 
-        .tmpl-content-wrapper { 
-            position: relative; z-index: 2; width: 100%; display: flex; flex-direction: column; align-items: center; 
-            padding: 0 50px 60px 50px;
-            margin-top: -60px; /* 向上微调，使得内容卡片部分陷入在渐变黑雾中，极具层次感 */
-        }
+        .tmpl-header { text-align: center; margin-bottom: 30px; width: 100%; }
+        /* 金色書法體真迹復刻 */
+        .tmpl-title { font-family: "Noto Serif SC", serif; font-size: 64px; letter-spacing: 28px; margin: 0 0 15px 28px; color: #fff; text-shadow: 0 0 40px rgba(212,175,55,0.6); font-weight: bold;}
+        .tmpl-slogan { font-size: 20px; color: #d4af37; letter-spacing: 12px; font-family: sans-serif; text-transform: uppercase; margin-left: 12px;}
 
-        .tmpl-gua-info { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
-        .tmpl-gua-symbol { font-size: 80px; font-family: serif; color: #d4af37; line-height: 1; margin-bottom: 10px; text-shadow: 0 0 30px rgba(212,175,55,0.5);}
-        .tmpl-gua-name { font-size: 32px; font-weight: bold; color: #fff; margin-bottom: 5px; letter-spacing: 8px;}
-        .tmpl-yao-name { font-size: 20px; color: #d4af37; letter-spacing: 4px;}
+        /* V16/V17 核心：周文王观象 vs 机器人算力，中间智库浑天仪融合点 */
+        .tmpl-gua-wrap { display: flex; align-items: center; justify-content: center; margin-bottom: 50px; position: relative; gap: 40px; padding: 0 20px;}
+        .tmpl-taiji-icon { font-size: 140px; color: #8e291c; line-height: 1; text-shadow: 0 0 50px rgba(142,41,28,0.6); filter: drop-shadow(0 0 20px rgba(212,175,55,0.2)); }
+        .tmpl-gua-info { display: flex; flex-direction: column; align-items: flex-start; border-left: 2px solid rgba(212,175,55,0.4); padding-left: 30px; }
+        .tmpl-gua-symbol { font-size: 100px; font-family: serif; color: #d4af37; line-height: 1; margin-bottom: 10px; text-shadow: 0 0 30px rgba(212,175,55,0.5);}
+        .tmpl-gua-name { font-size: 36px; font-weight: bold; color: #fff; margin-bottom: 5px; letter-spacing: 8px;}
+        .tmpl-yao-name { font-size: 22px; color: #d4af37; letter-spacing: 4px;}
 
-        .tmpl-content-section { width: 100%; display: flex; flex-direction: column; gap: 35px; margin-bottom: 50px; }
+        /* 下方大的金色标题：一窥天演，智定鼎局。 */
+        .tmpl-big-slogan { font-family: "Noto Serif SC", serif; font-size: 40px; color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.2); letter-spacing: 12px; margin-bottom: 60px; font-weight: normal; margin-left: 12px;}
+
+        /* 解卦全要素复刻区 (带事实性校验和品牌智囊底蕴) */
+        .tmpl-content-section { width: 100%; display: flex; flex-direction: column; gap: 35px; margin-bottom: 60px; }
         
-        .tmpl-section-card { border: 1px solid rgba(212,175,55,0.4); padding: 40px 35px 35px 35px; position: relative; background: linear-gradient(180deg, rgba(20,25,35,0.7) 0%, rgba(10,12,18,0.9) 100%); box-shadow: inset 0 0 30px rgba(0,0,0,0.6); }
-        .tmpl-label { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); background: #05070a; padding: 0 25px; font-size: 18px; color: #d4af37; letter-spacing: 6px; border: 1px solid rgba(212,175,55,0.6); border-radius: 30px;}
-        .tmpl-card-quote { font-size: 26px; font-weight: bold; color: #fff; margin-bottom: 20px; text-align: center; line-height: 1.6; text-shadow: 0 0 15px rgba(255,255,255,0.3);}
+        .tmpl-section-card { border: 1px solid rgba(212,175,55,0.3); padding: 35px 30px; position: relative; background: linear-gradient(180deg, rgba(20,25,35,0.6) 0%, rgba(10,12,18,0.8) 100%); box-shadow: inset 0 0 30px rgba(0,0,0,0.5); }
+        .tmpl-label { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #05070a; padding: 0 20px; font-size: 16px; color: #d4af37; letter-spacing: 4px; border: 1px solid rgba(212,175,55,0.4); border-radius: 20px;}
+        .tmpl-card-quote { font-size: 26px; font-weight: bold; color: #fff; margin-bottom: 20px; text-align: center; line-height: 1.5; text-shadow: 0 0 10px rgba(255,255,255,0.2);}
         .tmpl-card-desc { font-size: 20px; color: #a59c90; line-height: 1.8; text-align: justify; }
+        .tmpl-card-desc strong { color: #8e291c; font-weight: normal;} /* 朱砂红点缀核心原典字词 */
 
-        .tmpl-strategy-box { width: 100%; border: 2px solid #d4af37; padding: 55px 40px 40px 40px; position: relative; background: rgba(212,175,55,0.05); box-shadow: 0 0 40px rgba(212,175,55,0.1); }
-        .tmpl-strat-label { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: #d4af37; color: #000; padding: 8px 30px; font-size: 22px; font-weight: bold; letter-spacing: 8px; border-radius: 4px; box-shadow: 0 0 20px rgba(212,175,55,0.5);}
+        .tmpl-strategy-box { width: 100%; border: 2px solid #d4af37; padding: 45px 35px 35px 35px; position: relative; background: rgba(212,175,55,0.05); }
+        .tmpl-strat-label { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); background: #d4af37; color: #000; padding: 6px 24px; font-size: 18px; font-weight: bold; letter-spacing: 6px; border-radius: 4px;}
         .tmpl-strat-content { font-size: 22px; color: #e6dfd3; line-height: 2.1; text-align: justify; }
         .tmpl-strat-content p { margin-bottom: 1.2em; }
         .tmpl-strat-content strong { color: #d4af37; font-weight: normal; border-bottom: 1px solid #d4af37; padding-bottom: 2px;}
 
-        /* 底部真实定向二维码 */
-        .tmpl-footer-qr { width: 100%; display: flex; flex-direction: column; align-items: center; border-top: 1px solid rgba(212,175,55,0.3); padding-top: 40px; }
-        .qr-frame { padding: 15px; border: 2px solid #d4af37; border-radius: 6px; background: #fff; position: relative; margin-bottom: 20px; box-shadow: 0 0 40px rgba(212,175,55,0.3); }
-        .qr-frame::before, .qr-frame::after { content: ''; position: absolute; width: 25px; height: 25px; border-color: #d4af37; border-style: solid; }
-        .qr-frame::before { top: -10px; left: -10px; border-width: 4px 0 0 4px; }
-        .qr-frame::after { bottom: -10px; right: -10px; border-width: 0 4px 4px 0; }
-        .tmpl-qrcode-canvas { width: 180px !important; height: 180px !important; display: block;}
+        /* V17 分享图艺术基座与二维码 */
+        .tmpl-footer-art { width: 100%; display: flex; flex-direction: column; align-items: center; border-top: 1px solid rgba(212,175,55,0.2); padding-top: 40px; position: relative; }
         
-        .qr-tip { font-size: 18px; color: #a59c90; margin: 0 0 10px 0; letter-spacing: 6px; text-transform: uppercase; font-weight: bold;}
-        .url-text { font-size: 16px; color: #d4af37; font-family: monospace; letter-spacing: 2px; opacity: 0.9;}
+        .tmpl-footer-taiji { position: absolute; font-size: 60px; color: #8e291c; opacity: 0.8; top: -30px; left: 50%; transform: translateX(-50%); text-shadow: 0 0 20px rgba(142,41,28,0.5); }
+        
+        .qr-frame { padding: 10px; border: 2px solid #d4af37; border-radius: 4px; background: #fff; position: relative; margin-bottom: 15px; }
+        .qr-frame::before, .qr-frame::after { content: ''; position: absolute; width: 15px; height: 15px; border-color: #d4af37; border-style: solid; }
+        .qr-frame::before { top: -6px; left: -6px; border-width: 2px 0 0 2px; }
+        .qr-frame::after { bottom: -6px; right: -6px; border-width: 0 2px 2px 0; }
+        .tmpl-qrcode-canvas { width: 120px !important; height: 120px !important; display: block;}
+        
+        .qr-center p { font-size: 16px; color: #a59c90; margin: 0; letter-spacing: 3px; font-weight: bold; text-shadow: 0 0 5px rgba(0,0,0,1);}
+        .qr-center .url-text { font-size: 12px; color: #d4af37; font-family: monospace; margin-top: 8px; letter-spacing: 1px;}
+        
+        .tmpl-footer-slogan { font-size: 12px; color: #8c857a; margin-top: 15px; letter-spacing: 1px; font-family: sans-serif; opacity: 0.6;}
 
         #image-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; animation: fadeInModal 0.4s forwards; }
         @keyframes fadeInModal { to { opacity: 1; } }
         .modal-content { max-width: 90%; max-height: 90%; display: flex; flex-direction: column; align-items: center; position: relative; }
         #final-share-image { max-width: 100%; max-height: 80vh; box-shadow: 0 0 60px rgba(212,175,55,0.25); border: 1px solid rgba(212,175,55,0.6); border-radius: 8px; object-fit: contain; }
-        .modal-tip { color: #d4af37; margin-top: 25px; font-size: 15px; letter-spacing: 3px; text-shadow: 0 0 5px rgba(0,0,0,1); font-weight: bold;}
+        .modal-tip { color: #d4af37; margin-top: 20px; font-size: 15px; letter-spacing: 3px; text-shadow: 0 0 5px rgba(0,0,0,1); font-weight: bold;}
         .close-modal-btn { position: absolute; top: -50px; right: 0; background: rgba(212,175,55,0.1); border: 1px solid var(--gold); color: var(--gold); padding: 8px 25px; cursor: pointer; border-radius: 20px; font-size: 14px; }
     </style>
 </head>
@@ -161,15 +161,23 @@
 <canvas id="canvas-bg"></canvas>
 
 <div id="share-card-template">
-    
-    <div class="tmpl-hero-banner"></div>
-
+    <div class="texture-overlay"></div>
     <div class="tmpl-content-wrapper">
-        <div class="tmpl-gua-info">
-            <div class="tmpl-gua-symbol" id="tmpl-gua-symbol">䷀</div>
-            <div class="tmpl-gua-name" id="tmpl-gua-name">乾为天</div>
-            <div class="tmpl-yao-name" id="tmpl-yao-name">爻位：初九</div>
+        <div class="tmpl-header">
+            <h2 class="tmpl-title">易鼎战略</h2>
+            <div class="tmpl-slogan">一窥天演，智定鼎局。</div>
         </div>
+        
+        <div class="tmpl-gua-wrap">
+            <div class="tmpl-taiji-icon">☯</div>
+            <div class="tmpl-gua-info">
+                <div class="tmpl-gua-symbol" id="tmpl-gua-symbol">䷀</div>
+                <div class="tmpl-gua-name" id="tmpl-gua-name">乾为天</div>
+                <div class="tmpl-yao-name" id="tmpl-yao-name">爻位：初九</div>
+            </div>
+        </div>
+
+        <h3 class="tmpl-big-slogan">一窥天演，智定鼎局。</h3>
 
         <div class="tmpl-content-section">
             <div class="tmpl-section-card">
@@ -188,12 +196,16 @@
             </div>
         </div>
 
-        <div class="tmpl-footer-qr">
+        <div class="tmpl-footer-art">
+            <div class="tmpl-footer-taiji">☯</div>
             <div class="qr-frame">
                 <canvas id="tmpl-qrcode-canvas" class="tmpl-qrcode-canvas"></canvas>
             </div>
-            <div class="qr-tip">扫码入局 · 一定胜局</div>
-            <div class="url-text">www.yishu-strategy.com</div>
+            <div class="qr-center">
+                <p>長按二維碼 · 凝神起卦</p>
+                <div class="url-text">www.yishu-strategy.com</div>
+            </div>
+            <div class="tmpl-footer-slogan">FATE & STRATEGY DEFINED BY YIDING</div>
         </div>
     </div>
 </div>
@@ -202,7 +214,7 @@
     <div class="modal-content">
         <button class="close-modal-btn" onclick="closeModal()">关闭预览</button>
         <img src="" alt="分享图预览" id="final-share-image">
-        <div class="modal-tip">長按上方海報 · 選擇「保存圖片」至相冊</div>
+        <div class="modal-tip">長按上方符文海報 · 選擇「保存圖片」至相冊</div>
     </div>
 </div>
 
@@ -243,7 +255,7 @@
 
 <div class="share-control" id="share-control">
     <div class="share-control-inner">
-        <button class="btn" id="share-btn" onclick="generateShareImage()">生成史诗级融合海报 (带二维码)</button>
+        <button class="btn" id="share-btn" onclick="generateShareImage()">熔铸巅峰美学手机分享符文卡片 (纠错版)</button>
     </div>
 </div>
 
@@ -396,15 +408,15 @@
         document.getElementById('tmpl-yao-name').innerText = `爻位：${currentGuaData.exactLineName}`;
 
         document.getElementById('tmpl-gua-ci').innerText = `「 ${currentGuaData.guaCi} 」`;
-        document.getElementById('tmpl-gua-ci-desc').innerText = currentGuaData.guaCiDesc;
+        document.getElementById('tmpl-gua-ci-desc').innerHTML = currentGuaData.guaCiDesc;
         document.getElementById('tmpl-yao-ci').innerText = `「 ${currentGuaData.yaoCi} 」`;
-        document.getElementById('tmpl-yao-ci-desc').innerText = currentGuaData.yaoCiDesc;
+        document.getElementById('tmpl-yao-ci-desc').innerHTML = currentGuaData.yaoCiDesc;
         document.getElementById('tmpl-strategy-block').innerHTML = currentGuaData.strategy;
 
         const qrcodeCanvas = document.getElementById('tmpl-qrcode-canvas');
         try {
             await QRCode.toCanvas(qrcodeCanvas, 'https://www.yishu-strategy.com/', {
-                width: 180, margin: 0, color: { dark: '#000000', light: '#ffffff' } 
+                width: 120, margin: 0, color: { dark: '#000000', light: '#ffffff' } 
             });
         } catch (err) { console.error("QR Error", err); }
 
@@ -421,7 +433,7 @@
             console.error(e); alert("星图绘制中断，云端矩阵故障");
         } finally {
             template.style.display = 'none'; 
-            shareBtn.innerText = "生成史诗级融合海报 (带二维码)"; shareBtn.disabled = false;
+            shareBtn.innerText = "熔铸巅峰美学手机分享符文卡片 (纠错版)"; shareBtn.disabled = false;
         }
     }
     function closeModal() { document.getElementById('image-modal').style.display = 'none'; }
