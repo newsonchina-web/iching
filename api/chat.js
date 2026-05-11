@@ -13,7 +13,7 @@ export default async function handler(req, res) {
                 model: "glm-4-flash", 
                 messages: messages, 
                 temperature: 0.5, 
-                max_tokens: 1500 
+                max_tokens: 2000  // 提升 max_tokens 以容纳极其详尽的多维解析
             })
         });
 
