@@ -26,9 +26,9 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        .header { text-align: center; margin-bottom: 40px; margin-top: 2vh; }
-        .header h1 { font-size: 36px; font-weight: normal; letter-spacing: 12px; margin: 0 0 10px 12px; color: var(--gold); }
-        .header .stamp { font-size: 12px; letter-spacing: 4px; color: var(--text-dim); text-transform: uppercase; font-family: sans-serif; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 38px; font-weight: normal; letter-spacing: 14px; margin: 0 0 10px 14px; color: var(--gold); }
+        .header .stamp { font-size: 12px; letter-spacing: 6px; color: var(--text-dim); }
 
         .control-panel {
             width: 100%; background: var(--glass-bg); backdrop-filter: blur(10px);
@@ -37,108 +37,103 @@
         
         .input-box {
             width: 100%; padding: 15px 0; border: none; border-bottom: 1px solid rgba(212, 175, 55, 0.4);
-            background: transparent; font-size: 16px; font-family: inherit; text-align: center; color: #fff; outline: none; transition: 0.3s; margin-bottom: 30px; letter-spacing: 1px;
+            background: transparent; font-size: 16px; font-family: inherit; text-align: center; color: #fff; outline: none; margin-bottom: 30px;
         }
         .input-box:focus { border-bottom-color: var(--gold); }
 
         .btn {
             display: block; width: 100%; background: transparent; color: var(--gold); border: 1px solid var(--gold);
-            padding: 15px; font-size: 16px; font-family: inherit; letter-spacing: 8px; text-indent: 8px; border-radius: 4px; cursor: pointer; transition: 0.3s; text-align: center;
+            padding: 15px; font-size: 16px; letter-spacing: 8px; text-indent: 8px; border-radius: 4px; cursor: pointer; transition: 0.3s;
         }
-        .btn:disabled { color: var(--text-dim); border-color: var(--text-dim); cursor: not-allowed; }
-        .btn:hover:not(:disabled) { background: rgba(212, 175, 55, 0.1); }
+        .btn:hover:not(:disabled) { background: rgba(212, 175, 55, 0.1); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
 
-        .status-msg { text-align: center; font-size: 14px; letter-spacing: 2px; margin-top: -20px; margin-bottom: 30px; display: none; color: var(--gold); }
-
-        .result-panel { width: 100%; display: none; }
-
-        .gua-display { text-align: center; margin-bottom: 40px; }
-        .gua-symbol { font-size: 80px; line-height: 1; color: var(--gold); margin-bottom: 10px; }
-        .gua-name { font-size: 24px; color: var(--text-main); letter-spacing: 4px; margin-bottom: 8px; }
-        .gua-details { font-size: 14px; color: var(--gold); letter-spacing: 2px; }
-
+        .result-panel { width: 100%; display: none; margin-bottom: 50px;}
         .card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 4px; padding: 25px; margin-bottom: 20px; }
-        .card-title { font-size: 16px; color: var(--gold); margin-bottom: 15px; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 10px; font-weight: bold;}
+        .card-title { font-size: 16px; color: var(--gold); margin-bottom: 15px; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 10px; }
         .classic-quote { font-size: 18px; color: #fff; margin-bottom: 10px; }
-        .classic-explain { font-size: 15px; color: var(--text-dim); line-height: 1.8; text-align: justify; }
         .strategy-content { font-size: 16px; color: var(--text-main); line-height: 2; text-align: justify; }
 
-        .share-control { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(5, 7, 10, 0.95); border-top: 1px solid var(--glass-border); padding: 20px; box-sizing: border-box; z-index: 100; display: none; justify-content: center; }
-
-        /* 海报模板 */
+        /* 海报模板布局 */
         #share-card-template {
             position: absolute; left: -9999px; top: -9999px; 
-            width: 750px; background: #05070a; color: #d1c5b4; 
+            width: 800px; background: #05070a; color: #d1c5b4; 
             display: none; flex-direction: column; align-items: center;
         }
         
-        .poster-img { width: 100%; height: auto; display: block; object-fit: cover; }
+        .poster-hero { width: 100%; height: auto; display: block; }
+        .poster-body { padding: 50px 60px; width: 100%; box-sizing: border-box; }
         
-        .poster-content { padding: 40px 50px 60px 50px; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; }
+        .poster-header { text-align: center; margin-bottom: 40px; }
+        .poster-title { font-size: 60px; letter-spacing: 24px; color: #fff; margin-bottom: 10px; font-weight: bold; }
+        .poster-sub { font-size: 22px; color: #d4af37; letter-spacing: 10px; margin-bottom: 20px;}
         
-        .poster-gua { text-align: center; margin-bottom: 30px; }
-        .poster-gua-symbol { font-size: 60px; color: #d4af37; line-height: 1; margin-bottom: 10px; }
-        .poster-gua-title { font-size: 28px; color: #fff; margin-bottom: 5px; letter-spacing: 4px;}
-        .poster-gua-yao { font-size: 18px; color: #d4af37; }
+        .poster-gua-section { text-align: center; margin-bottom: 40px; border-top: 1px solid rgba(212,175,55,0.2); border-bottom: 1px solid rgba(212,175,55,0.2); padding: 30px 0;}
+        .poster-gua-name { font-size: 36px; color: #fff; letter-spacing: 8px; margin-bottom: 10px;}
+        .poster-gua-yao { font-size: 20px; color: #d4af37; }
 
-        .poster-text-box { width: 100%; border: 1px solid rgba(212,175,55,0.3); padding: 30px; margin-bottom: 25px; background: rgba(20,25,35,0.5); box-sizing: border-box;}
-        .poster-box-title { color: #d4af37; font-size: 18px; margin-bottom: 15px; font-weight: bold; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 10px;}
-        .poster-quote { font-size: 20px; color: #fff; margin-bottom: 10px; line-height: 1.5; }
-        .poster-desc { font-size: 16px; color: #a59c90; line-height: 1.8; text-align: justify; }
-        .poster-strategy { font-size: 18px; color: #e6dfd3; line-height: 2; text-align: justify; }
+        .poster-box { width: 100%; border: 1px solid rgba(212,175,55,0.3); padding: 35px; margin-bottom: 30px; background: rgba(20,25,35,0.5); }
+        .poster-box-label { font-size: 18px; color: #d4af37; margin-bottom: 15px; font-weight: bold; text-transform: uppercase; border-left: 4px solid #d4af37; padding-left: 15px;}
+        .poster-quote-text { font-size: 22px; color: #fff; margin-bottom: 15px; line-height: 1.6; }
+        .poster-main-text { font-size: 19px; color: #e6dfd3; line-height: 2; text-align: justify; }
 
-        .poster-footer { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 20px; border-top: 1px solid rgba(212,175,55,0.2); padding-top: 30px;}
-        .qr-wrapper { padding: 10px; background: #fff; border: 2px solid #d4af37; border-radius: 4px; margin-bottom: 15px;}
-        .qr-canvas { display: block; width: 120px !important; height: 120px !important; }
-        .poster-footer-text { font-size: 14px; color: #a59c90; letter-spacing: 2px; margin-bottom: 5px; }
-        .poster-footer-url { font-size: 14px; color: #d4af37; font-family: sans-serif; }
+        .poster-footer { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding-top: 40px; border-top: 2px solid #d4af37; }
+        .footer-left { display: flex; flex-direction: column; align-items: flex-start; }
+        .footer-slogan { font-size: 22px; color: #fff; letter-spacing: 4px; margin-bottom: 10px; font-weight: bold;}
+        .footer-url { font-size: 16px; color: #d4af37; font-family: sans-serif; }
+        
+        .qr-box { padding: 12px; background: #fff; border-radius: 4px; box-shadow: 0 0 20px rgba(212,175,55,0.3); }
+        .qr-canvas { width: 140px !important; height: 140px !important; display: block; }
 
-        #image-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; display: none; justify-content: center; align-items: center; }
-        .modal-content { max-width: 90%; max-height: 90%; display: flex; flex-direction: column; align-items: center; position: relative; }
-        #final-share-image { max-width: 100%; max-height: 80vh; border: 1px solid var(--gold); border-radius: 4px; object-fit: contain; }
-        .modal-tip { color: var(--gold); margin-top: 15px; font-size: 14px; letter-spacing: 2px; }
-        .close-modal-btn { position: absolute; top: -40px; right: 0; background: none; border: 1px solid var(--gold); color: var(--gold); padding: 6px 16px; cursor: pointer; border-radius: 4px; }
+        #image-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; display: none; justify-content: center; align-items: center; }
+        .modal-content { max-width: 90%; max-height: 90%; display: flex; flex-direction: column; align-items: center; }
+        #final-share-image { max-width: 100%; max-height: 85vh; border: 1px solid var(--gold); }
+        .close-modal-btn { position: absolute; top: -50px; right: 0; color: #fff; background: none; border: 1px solid #fff; padding: 5px 15px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <canvas id="canvas-bg"></canvas>
 
-<!-- 海报生成区 -->
+<!-- 史诗海报模板 -->
 <div id="share-card-template">
-    <!-- 动态加载图片，避免缓存 -->
-    <img id="poster-hero-img" src="" class="poster-img" crossorigin="anonymous" alt="易鼎战略">
-    
-    <div class="poster-content">
-        <div class="poster-gua">
-            <div class="poster-gua-symbol" id="tmpl-gua-symbol">䷀</div>
-            <div class="poster-gua-title" id="tmpl-gua-name">乾为天</div>
-            <div class="poster-gua-yao" id="tmpl-yao-name">初九</div>
+    <img id="poster-hero-img" src="" class="poster-hero" crossorigin="anonymous">
+    <div class="poster-body">
+        <div class="poster-header">
+            <div class="poster-title">易鼎戰略</div>
+            <div class="poster-sub">YIDING STRATEGY · 东方战略智库</div>
         </div>
 
-        <div class="poster-text-box">
-            <div class="poster-box-title">大局 · 卦意</div>
-            <div class="poster-quote" id="tmpl-gua-ci"></div>
-            <div class="poster-desc" id="tmpl-gua-ci-desc"></div>
+        <div class="poster-gua-section">
+            <div class="poster-gua-name" id="tmpl-gua-name">兑为泽</div>
+            <div class="poster-gua-yao" id="tmpl-yao-name">爻位：初九</div>
+        </div>
+
+        <div class="poster-box">
+            <div class="poster-box-label">大局 · 卦辞</div>
+            <div class="poster-quote-text" id="tmpl-gua-ci"></div>
+            <div class="poster-main-text" id="tmpl-gua-ci-desc"></div>
         </div>
         
-        <div class="poster-text-box">
-            <div class="poster-box-title">微观 · 爻变</div>
-            <div class="poster-quote" id="tmpl-yao-ci"></div>
-            <div class="poster-desc" id="tmpl-yao-ci-desc"></div>
+        <div class="poster-box">
+            <div class="poster-box-label">变数 · 爻辞</div>
+            <div class="poster-quote-text" id="tmpl-yao-ci"></div>
+            <div class="poster-main-text" id="tmpl-yao-ci-desc"></div>
         </div>
         
-        <div class="poster-text-box" style="border-color: #d4af37;">
-            <div class="poster-box-title" style="color: #fff; background: rgba(212,175,55,0.2); padding: 5px 10px; display: inline-block; border: none;">现实推演</div>
-            <div class="poster-strategy" id="tmpl-strategy-block"></div>
+        <div class="poster-box" style="border-color: #d4af37; background: rgba(212,175,55,0.05);">
+            <div class="poster-box-label" style="background: #d4af37; color: #000; padding-right: 10px;">降维定局推演</div>
+            <div class="poster-main-text" id="tmpl-strategy-block"></div>
         </div>
 
         <div class="poster-footer">
-            <div class="qr-wrapper">
+            <div class="footer-left">
+                <div class="footer-slogan">一窥天演，智定鼎局。</div>
+                <div class="footer-slogan" style="font-size:16px; color:#8c857a; font-weight:normal;">链接高维智慧 · 掌控绝对变局</div>
+                <div class="footer-url">www.yishu-strategy.com</div>
+            </div>
+            <div class="qr-box">
                 <canvas id="tmpl-qrcode-canvas" class="qr-canvas"></canvas>
             </div>
-            <div class="poster-footer-text">长按扫码获取战略推演</div>
-            <div class="poster-footer-url">www.yishu-strategy.com</div>
         </div>
     </div>
 </div>
@@ -146,8 +141,8 @@
 <div id="image-modal">
     <div class="modal-content">
         <button class="close-modal-btn" onclick="closeModal()">关闭</button>
-        <img src="" alt="分享海报" id="final-share-image">
-        <div class="modal-tip">长按保存海报</div>
+        <img src="" id="final-share-image">
+        <p style="color:#d4af37; margin-top:15px;">长按上方海报，保存并开启定局</p>
     </div>
 </div>
 
@@ -157,35 +152,35 @@
         <div class="stamp">YIDING STRATEGY</div>
     </div>
     <div class="control-panel">
-        <input type="text" id="user-question" class="input-box" placeholder="输入您当下的问题或困局..." autocomplete="off">
-        <button class="btn" id="submit-btn" onclick="castAndAnalyze()">开始起卦</button>
+        <input type="text" id="user-question" class="input-box" placeholder="写下您的当下困局..." autocomplete="off">
+        <button class="btn" id="submit-btn" onclick="castAndAnalyze()">凝神起卦</button>
     </div>
     <div id="status-box" class="status-msg"></div>
     <div id="result-panel" class="result-panel">
         <div class="gua-display">
             <div class="gua-symbol" id="hex-symbol">䷀</div>
-            <div class="gua-name" id="hex-title">乾为天</div>
-            <div class="gua-details" id="hex-line">初九</div>
+            <div class="gua-name" id="hex-title"></div>
+            <div class="gua-details" id="hex-line"></div>
         </div>
         <div class="card">
-            <div class="card-title">卦意</div>
+            <div class="card-title">大局 · 卦辞</div>
             <div class="classic-quote" id="gua-ci"></div>
             <div class="classic-explain" id="gua-ci-desc"></div>
         </div>
         <div class="card">
-            <div class="card-title">爻变</div>
+            <div class="card-title">变数 · 爻辞</div>
             <div class="classic-quote" id="yao-ci"></div>
             <div class="classic-explain" id="yao-ci-desc"></div>
         </div>
-        <div class="card">
-            <div class="card-title">战略推演</div>
+        <div class="card" style="border-color: #d4af37;">
+            <div class="card-title" style="background: #d4af37; color: #000; padding: 5px 10px;">智道 · 战略推演</div>
             <div class="strategy-content" id="strategy-content"></div>
         </div>
     </div>
 </div>
 
 <div class="share-control" id="share-control">
-    <button class="btn" id="share-btn" onclick="generateShareImage()">生成分享海报</button>
+    <button class="btn" onclick="generateShareImage()">生成智道定局海报</button>
 </div>
 
 <script>
@@ -194,8 +189,8 @@
     let width, height, particles;
     function initCanvas() {
         width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; particles = [];
-        for (let i = 0; i < 50; i++) {
-            particles.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.2, vy: (Math.random() - 0.5) * 0.2, size: Math.random() * 1.5, alpha: Math.random() * 0.5 + 0.1 });
+        for (let i = 0; i < 40; i++) {
+            particles.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.1, vy: (Math.random() - 0.5) * 0.1, size: Math.random() * 2, alpha: Math.random() * 0.5 });
         }
     }
     function animate() {
@@ -220,7 +215,7 @@
     }
 
     function parseAIResponse(text) {
-        const sections = { gua_ci: "【卦辞】", gua_ci_desc: "【卦辞解析】", yao_ci: "【爻辞】", yao_ci_desc: "【爻辞解析】", strategy: "【推演】" };
+        const sections = { gua_ci: "【卦辞】", gua_ci_desc: "【卦辞解析】", yao_ci: "【爻辞】", yao_ci_desc: "【爻辞解析】", strategy: "【战略定局】" };
         let parsed = {}; let keys = Object.keys(sections);
         for(let i=0; i<keys.length; i++) {
             let key = keys[i]; let startTag = sections[key]; let nextTag = i < keys.length - 1 ? sections[keys[i+1]] : null;
@@ -229,13 +224,7 @@
             startIndex += startTag.length;
             let endIndex = nextTag ? text.indexOf(nextTag, startIndex) : text.length;
             if (endIndex === -1) endIndex = text.length;
-            
-            let content = text.substring(startIndex, endIndex).trim();
-            // 核心修复：强力去除AI可能多输出的“(原文)”或“（原文）”以及多余的换行
-            content = content.replace(/^[(（]原文[)）]/, '').trim(); 
-            content = content.replace(/\n/g, '<br>');
-            // 去除首尾多余的 <br>
-            content = content.replace(/^(<br>)+/, '').replace(/(<br>)+$/, '');
+            let content = text.substring(startIndex, endIndex).trim().replace(/\n/g, '<br>');
             parsed[key] = content;
         }
         return parsed;
@@ -245,12 +234,11 @@
 
     async function castAndAnalyze() {
         const question = document.getElementById('user-question').value;
+        if (!question.trim()) { alert("请写下您的困局。"); return; }
         const btn = document.getElementById('submit-btn');
-        if (!question.trim()) { alert("请输入问题。"); return; }
-
-        document.getElementById('result-panel').style.display = 'none'; 
-        document.getElementById('share-control').style.display = 'none'; 
-        btn.innerText = "正在推演..."; btn.disabled = true;
+        btn.innerText = "高维算力跃迁中..."; btn.disabled = true;
+        document.getElementById('status-box').style.display = 'block';
+        document.getElementById('status-box').innerText = "硅基引擎启动，正在交汇中西顶尖哲思，推演现实定局...";
 
         const index = Math.floor(Math.random() * 64); const name = hexagrams[index]; const line = Math.floor(Math.random() * 6) + 1; 
         const symbol = String.fromCodePoint(0x4DC0 + index); const exactLineName = getLineName(hexagramBinaries[index], line);
@@ -263,58 +251,57 @@
                     messages: [
                         { 
                             role: "system", 
-                            content: `结合用户问题，对《易经》进行解读。语气平实客观。
-当前抽中：${name}卦，${exactLineName}。
-请严格按照以下5个标题输出内容，不要在标题后追加“(原文)”等额外字眼，直接输出内容：
-【卦辞】
-【卦辞解析】
-【爻辞】
-【爻辞解析】
-【推演】`
+                            content: `你是一位融合了《周易》象数与全球顶尖战略思想的超级智库大脑。
+你的思想库不仅包含：东方古典智慧（老庄天道、王阳明心学、孙子兵法）、西方经典（斯多葛学派、彼得·德鲁克现代管理），更深度融合了当代顶尖商业与科技领袖的底层逻辑：瑞·达利欧（Ray Dalio）的机器与原则周期、纳瓦尔（Naval Ravikant）的财富与杠杆原理、埃隆·马斯克（Elon Musk）的第一性原理、史蒂夫·乔布斯（Steve Jobs）的极致聚焦。
+
+你的解读必须极度深邃、冷峻、直击本质。严禁使用玄乎的算命套话或直白浅显的废话。
+
+输出格式要求（严禁多余的标点或寒暄，严格按5个【】标题输出）：
+【卦辞】(输出原文)
+【卦辞解析】(解析大局。必须引入达利欧的宏观周期或德鲁克的系统效能等现代视角来解构大环境)
+【爻辞】(输出原文)
+【爻辞解析】(解析当前变数。必须引入王阳明心学、马斯克的第一性原理或乔布斯的聚焦等微观/个人视角进行剖析)
+【战略定局】(这是灵魂！结合用户具体问题，给出3条极具实操性的降维打击策略。在策略中，必须明确点名并化用上述至少2位中外顶尖思想家（如纳瓦尔的杠杆、马斯克的物理学思维、老庄的顺势等）的核心理念，指出破局的最优解。)`
                         },
-                        { role: "user", content: `问题：${question}` }
+                        { role: "user", content: `卦象：${name}卦，爻位：${exactLineName}。问题：${question}` }
                     ]
                 })
             });
 
-            const data = await response.json(); 
-            if (!response.ok) throw new Error("网络错误");
+            const data = await response.json();
             const result = parseAIResponse(data.choices[0].message.content);
-
             currentGuaData = { symbol, name, exactLineName, ...result };
 
             document.getElementById('hex-symbol').innerText = symbol; 
             document.getElementById('hex-title').innerText = name; 
-            document.getElementById('hex-line').innerText = exactLineName;
-            
+            document.getElementById('hex-line').innerText = `爻位：${exactLineName}`;
             document.getElementById('gua-ci').innerHTML = result.gua_ci; 
             document.getElementById('gua-ci-desc').innerHTML = result.gua_ci_desc;
             document.getElementById('yao-ci').innerHTML = result.yao_ci; 
             document.getElementById('yao-ci-desc').innerHTML = result.yao_ci_desc;
             document.getElementById('strategy-content').innerHTML = result.strategy;
 
+            document.getElementById('status-box').style.display = 'none';
             document.getElementById('result-panel').style.display = 'block';
             document.getElementById('share-control').style.display = 'flex';
             document.getElementById('result-panel').scrollIntoView({ behavior: 'smooth' });
 
         } catch (e) {
-            alert("推演失败，请重试。");
+            alert("智道网络暂时中断，请重新起卦。");
         } finally {
-            btn.innerText = "重新起卦"; btn.disabled = false;
+            btn.innerText = "凝神起卦"; btn.disabled = false;
         }
     }
 
     async function generateShareImage() {
         if (!currentGuaData) return;
-        const btn = document.getElementById('share-btn'); 
-        btn.innerText = "生成中..."; btn.disabled = true;
+        const btn = document.querySelector('.share-control .btn');
+        btn.innerText = "符文熔铸中..."; btn.disabled = true;
 
-        // 核心修复：每次生成海报时，给图片加个时间戳参数，强制浏览器不使用旧缓存
-        document.getElementById('poster-hero-img').src = 'hero-bg.jpg?t=' + new Date().getTime();
-
-        document.getElementById('tmpl-gua-symbol').innerText = currentGuaData.symbol;
+        document.getElementById('poster-hero-img').src = 'hero-bg.jpg?v=' + Date.now();
+        
         document.getElementById('tmpl-gua-name').innerText = currentGuaData.name;
-        document.getElementById('tmpl-yao-name').innerText = currentGuaData.exactLineName;
+        document.getElementById('tmpl-yao-name').innerText = `爻位：${currentGuaData.exactLineName}`;
         document.getElementById('tmpl-gua-ci').innerHTML = currentGuaData.gua_ci;
         document.getElementById('tmpl-gua-ci-desc').innerHTML = currentGuaData.gua_ci_desc;
         document.getElementById('tmpl-yao-ci').innerHTML = currentGuaData.yao_ci;
@@ -322,25 +309,22 @@
         document.getElementById('tmpl-strategy-block').innerHTML = currentGuaData.strategy;
 
         try {
-            await QRCode.toCanvas(document.getElementById('tmpl-qrcode-canvas'), 'https://www.yishu-strategy.com/', {
-                width: 120, margin: 1, color: { dark: '#000', light: '#fff' } 
-            });
+            await QRCode.toCanvas(document.getElementById('tmpl-qrcode-canvas'), 'https://www.yishu-strategy.com/', { width: 140, margin: 1 });
         } catch (err) {}
 
         const template = document.getElementById('share-card-template');
         template.style.display = 'flex'; 
 
         try {
-            // 确保图片加载完成后再截图
-            await new Promise(r => setTimeout(r, 500)); 
+            await new Promise(r => setTimeout(r, 600));
             const canvas = await html2canvas(template, { scale: 2, useCORS: true, backgroundColor: '#05070a' });
             document.getElementById('final-share-image').src = canvas.toDataURL('image/png');
             document.getElementById('image-modal').style.display = 'flex';
         } catch (e) {
-            alert("生成图片失败，请检查 hero-bg.jpg 是否在同目录下并已正确上传。");
+            alert("生成失败，请确保 hero-bg.jpg 已上传至根目录。");
         } finally {
             template.style.display = 'none'; 
-            btn.innerText = "生成分享海报"; btn.disabled = false;
+            btn.innerText = "生成智道定局海报"; btn.disabled = false;
         }
     }
     function closeModal() { document.getElementById('image-modal').style.display = 'none'; }
