@@ -70,7 +70,7 @@
 
         .share-control { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(5, 7, 10, 0.95); border-top: 1px solid var(--glass-border); padding: 25px; box-sizing: border-box; z-index: 100; display: none; justify-content: center; backdrop-filter: blur(10px); }
 
-        /* 海报模板 - 极致视觉重构 */
+        /* 海报模板 */
         #share-card-template {
             position: absolute; left: -9999px; top: -9999px; 
             width: 850px; background: #05070a; color: #d1c5b4; 
@@ -79,11 +79,10 @@
         
         .poster-hero { width: 100%; height: auto; display: block; }
         
-        /* 在神图之上悬浮巨大的卦象图腾 */
         .poster-hero-wrap { position: relative; width: 100%; }
         .poster-floating-gua {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 220px; color: rgba(212, 175, 55, 0.15); /* 淡淡的半透明金色 */
+            font-size: 220px; color: rgba(212, 175, 55, 0.15);
             text-shadow: 0 0 50px rgba(212, 175, 55, 0.4);
             pointer-events: none;
         }
@@ -142,19 +141,19 @@
         </div>
 
         <div class="poster-box">
-            <div class="poster-box-label">易理 · 宏观大局</div>
+            <div class="poster-box-label">观象 · 大局</div>
             <div class="poster-text-quote" id="tmpl-gua-ci"></div>
             <div class="poster-text-main" id="tmpl-gua-ci-desc"></div>
         </div>
         
         <div class="poster-box">
-            <div class="poster-box-label">象辞 · 微观变数</div>
+            <div class="poster-box-label">察变 · 微观</div>
             <div class="poster-text-quote" id="tmpl-yao-ci"></div>
             <div class="poster-text-main" id="tmpl-yao-ci-desc"></div>
         </div>
         
         <div class="poster-box" style="border-width: 2px; border-color: var(--gold); background: rgba(212,175,55,0.06);">
-            <div class="poster-box-label" style="background: var(--gold); color: #000; padding: 5px 20px; border:none; display:inline-block; margin-left:-45px;">降维定局战略</div>
+            <div class="poster-box-label" style="background: var(--gold); color: #000; padding: 5px 20px; border:none; display:inline-block; margin-left:-45px;">易理定局推演</div>
             <div class="poster-text-main" id="tmpl-strategy-block" style="color:#fff; font-weight: bold;"></div>
         </div>
 
@@ -200,19 +199,19 @@
         </div>
         
         <div class="card">
-            <div class="card-title">宏观 · 卦辞原文</div>
+            <div class="card-title">大局 · 卦辞</div>
             <div class="classic-quote" id="gua-ci"></div>
             <div class="classic-explain" id="gua-ci-desc"></div>
         </div>
         
         <div class="card">
-            <div class="card-title">微观 · 变爻原文</div>
+            <div class="card-title">变数 · 爻辞</div>
             <div class="classic-quote" id="yao-ci"></div>
             <div class="classic-explain" id="yao-ci-desc"></div>
         </div>
         
         <div class="card" style="border-width: 2px; border-color: var(--gold);">
-            <div class="card-title" style="background: var(--gold); color: #000; padding: 5px 15px; border:none; display:inline-block;">智道 · 定局推演</div>
+            <div class="card-title" style="background: var(--gold); color: #000; padding: 5px 15px; border:none; display:inline-block;">定局 · 战略推演</div>
             <div class="strategy-content" id="strategy-content"></div>
         </div>
     </div>
@@ -259,7 +258,8 @@
     }
 
     function parseAIResponse(text) {
-        const sections = { gua_ci: "【卦辞】", gua_ci_desc: "【卦辞解析】", yao_ci: "【爻辞】", yao_ci_desc: "【爻辞解析】", strategy: "【战略定局】" };
+        // 更新解析标签，配合新的Prompt
+        const sections = { gua_ci: "【卦辞】", gua_ci_desc: "【大局观象】", yao_ci: "【爻辞】", yao_ci_desc: "【微观察变】", strategy: "【定局推演】" };
         let parsed = {}; let keys = Object.keys(sections);
         for(let i=0; i<keys.length; i++) {
             let key = keys[i]; let startTag = sections[key]; let nextTag = i < keys.length - 1 ? sections[keys[i+1]] : null;
@@ -279,9 +279,9 @@
         const question = document.getElementById('user-question').value;
         if (!question.trim()) { alert("请写下您的困局。"); return; }
         const btn = document.getElementById('submit-btn');
-        btn.innerText = "正在链接高维智慧..."; btn.disabled = true;
+        btn.innerText = "易理推演中..."; btn.disabled = true;
         document.getElementById('status-box').style.display = 'block';
-        document.getElementById('status-box').innerText = "太极流转，算力正在交汇古今哲思，推演天演之变...";
+        document.getElementById('status-box').innerText = "太极生两仪，正在洞察时、位、势、变...";
 
         const index = Math.floor(Math.random() * 64); const name = hexagrams[index]; const line = Math.floor(Math.random() * 6) + 1; 
         const symbol = String.fromCodePoint(0x4DC0 + index); const exactLineName = getLineName(hexagramBinaries[index], line);
@@ -294,15 +294,15 @@
                     messages: [
                         { 
                             role: "system", 
-                            content: `你是一位融合了《周易》正统卦理与全球顶级战略视野的决策大脑。
-解读原则：必须以易经的象数理为“经（准绳）”，以中西方思想家（王阳明、马斯克、达利欧、德鲁克、纳瓦尔、老庄、乔布斯等）的思想为“纬（佐证）”。
+                            content: `你是一位深谙《周易》底层逻辑的顶尖东方战略智囊。
+解读原则：抛弃生硬的名人名言引用，回归《周易》本身的“象、数、理”以及“时、位、势、变”核心哲理。将古老的卦辞爻辞，化作极其锐利、透彻的现代商业或人生决策指南。语气要深邃、客观、一针见血。
 
-输出要求：
-1. 【卦辞】(原文)
-2. 【卦辞解析】(基于易经大局，适当化用达利欧周期论或德鲁克系统观进行宏观解构)
-3. 【爻辞】(原文)
-4. 【爻辞解析】(基于变爻位置，化用心学知行合一或马斯克第一性原理分析当前变数)
-5. 【战略定局】(灵魂部分。结合问题给出3条斩钉截铁的策略。必须点名借鉴至少两位上述思想家，核心字词用<strong>加粗，展现降维打击的洞察力。)`
+输出要求（严格按以下5个【】标题输出，严禁附加多余字眼）：
+【卦辞】(直接输出原文)
+【大局观象】(基于易经原典，解析该卦代表的客观周期、大环境或规律)
+【爻辞】(直接输出原文)
+【微观察变】(基于变爻的“位”与“时”，剖析用户当下的处境、盲点或关键变量)
+【定局推演】(灵魂部分。完全基于上述易经哲理，结合用户的具体困境，给出3条极具实操性的破局或顺势策略。语言要冷峻、直指核心，核心字词用<strong>加粗。)`
                         },
                         { role: "user", content: `抽中卦象：${name}卦，爻位：${exactLineName}。问题：${question}` }
                     ]
@@ -328,7 +328,7 @@
             document.getElementById('result-panel').scrollIntoView({ behavior: 'smooth' });
 
         } catch (e) {
-            alert("高维网络波动，请再次凝神起卦。");
+            alert("易理推演暂时受阻，请重新起卦。");
         } finally {
             btn.innerText = "凝神起卦"; btn.disabled = false;
         }

@@ -12,7 +12,7 @@ export default async function handler(req, res) {
             body: JSON.stringify({ 
                 model: "glm-4-flash", 
                 messages: messages, 
-                temperature: 0.6, 
+                temperature: 0.5, 
                 max_tokens: 1500 
             })
         });
