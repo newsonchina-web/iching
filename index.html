@@ -9,10 +9,10 @@
     <style>
         :root {
             --bg-dark: #05070a; --text-main: #d1c5b4; --text-dim: #8c857a;
-            --gold: #d4af37; --gold-glow: rgba(212, 175, 55, 0.4);
+            --gold: #d4af37; --gold-glow: rgba(212, 175, 55, 0.5);
             --red-accent: #8e291c;
             --glass-bg: rgba(15, 20, 25, 0.7);
-            --glass-border: rgba(212, 175, 55, 0.25);
+            --glass-border: rgba(212, 175, 55, 0.3);
         }
         
         body, html {
@@ -31,7 +31,7 @@
 
         .header { text-align: center; margin-bottom: 40px; margin-top: 2vh; }
         .header h1 {
-            font-size: 40px; font-weight: 400; letter-spacing: 12px; margin: 0 0 10px 12px;
+            font-size: 42px; font-weight: 400; letter-spacing: 14px; margin: 0 0 10px 14px;
             background: linear-gradient(to bottom, #fff, var(--gold));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             text-shadow: 0 0 30px var(--gold-glow);
@@ -79,7 +79,7 @@
         .classic-quote { text-align: center; font-size: 20px; color: #fff; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed rgba(255,255,255,0.15); font-weight: 500; }
         .classic-explain { font-size: 15px; color: var(--text-dim); line-height: 1.8; text-align: justify; }
         
-        .strategy-card { border-color: rgba(212, 175, 55, 0.5); }
+        .strategy-card { border-color: rgba(212, 175, 55, 0.6); }
         .strategy-title { background: var(--gold); color: #000; font-weight: bold; }
         .strategy-content { font-size: 16px; color: var(--text-main); line-height: 2; text-align: justify; }
         .strategy-content p { margin-bottom: 1.2em; }
@@ -87,87 +87,60 @@
 
         .share-control { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(5, 7, 10, 0.95); backdrop-filter: blur(10px); border-top: 1px solid var(--glass-border); padding: 20px; box-sizing: border-box; z-index: 100; display: none; justify-content: center; }
 
-        /* --- V18 史诗级排版分享图 (星云质感 + 极高精度) --- */
+        /* --- V16.2 史诗海报版 --- */
         #share-card-template {
             position: absolute; left: -9999px; top: -9999px; 
-            width: 840px; /* 增加宽度以提升清晰度和排版空间 */
-            padding: 80px 70px 60px 70px; 
-            /* 宇宙深空背景 */
+            width: 800px; 
+            padding: 70px 50px 60px 50px; 
             background: linear-gradient(180deg, #020305 0%, #0d131f 40%, #05070a 100%);
-            color: #d1c5b4; 
-            border: 1px solid #3a3225; 
-            display: none; flex-direction: column; align-items: center;
-            overflow: hidden;
+            color: #d1c5b4; border: 1px solid #3a3225; display: none; flex-direction: column; align-items: center; overflow: hidden;
         }
         
-        /* 叠加 SVG 噪点纹理制造真实的高级纸张/星云质感 */
-        .texture-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.06"/></svg>');
-            pointer-events: none; z-index: 1;
-        }
+        .texture-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.08"/></svg>'); pointer-events: none; z-index: 1; }
         
-        /* 为了在 html2canvas 中确保层级，所有内容放进一个 content wrapper 中 */
         .tmpl-content-wrapper { position: relative; z-index: 2; width: 100%; display: flex; flex-direction: column; align-items: center; }
 
-        .tmpl-header { text-align: center; margin-bottom: 50px; width: 100%; position: relative; }
-        .tmpl-header::after { content: ''; position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); width: 60%; height: 1px; background: linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent); }
-        .tmpl-title { font-family: "Noto Serif SC", serif; font-size: 64px; letter-spacing: 30px; margin: 0 0 10px 30px; color: #fff; text-shadow: 0 0 40px rgba(212,175,55,0.6); font-weight: 300;}
-        .tmpl-slogan { font-size: 20px; color: #d4af37; letter-spacing: 12px; font-family: sans-serif; text-transform: uppercase; margin-left: 12px;}
-
-        /* 卦象与太极视觉中心 */
-        .tmpl-gua-wrap { display: flex; align-items: center; justify-content: center; margin-bottom: 50px; position: relative; gap: 40px;}
-        .tmpl-taiji-icon { font-size: 140px; color: #8e291c; line-height: 1; text-shadow: 0 0 50px rgba(142,41,28,0.6); filter: drop-shadow(0 0 20px rgba(212,175,55,0.2)); }
-        .tmpl-gua-info { display: flex; flex-direction: column; align-items: flex-start; border-left: 2px solid rgba(212,175,55,0.4); padding-left: 30px; }
-        .tmpl-gua-symbol { font-size: 100px; font-family: serif; color: #d4af37; line-height: 1; margin-bottom: 10px; text-shadow: 0 0 30px rgba(212,175,55,0.5);}
-        .tmpl-gua-name { font-size: 38px; font-weight: bold; color: #fff; margin-bottom: 5px; letter-spacing: 8px;}
-        .tmpl-yao-name { font-size: 22px; color: #d4af37; letter-spacing: 4px;}
-
-        .tmpl-content-section { width: 100%; display: flex; flex-direction: column; gap: 35px; margin-bottom: 60px; }
+        /* 顶部史诗视觉：左文王、右硅基、中太极 */
+        .tmpl-hero-banner { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 30px; position: relative; padding: 0 20px;}
+        .hero-side { width: 180px; display: flex; flex-direction: column; align-items: center; opacity: 0.9; }
+        .hero-svg { width: 120px; height: 120px; margin-bottom: 15px; filter: drop-shadow(0 0 15px rgba(212,175,55,0.3)); }
         
-        .tmpl-section-card { 
-            border: 1px solid rgba(212,175,55,0.3); padding: 40px 35px 35px 35px; position: relative; 
-            background: linear-gradient(180deg, rgba(20,25,35,0.6) 0%, rgba(10,12,18,0.8) 100%);
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
-        }
-        .tmpl-label { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); background: #05070a; padding: 0 25px; font-size: 18px; color: #d4af37; letter-spacing: 6px; border: 1px solid rgba(212,175,55,0.5); border-radius: 30px;}
-        .tmpl-card-quote { font-size: 28px; font-weight: bold; color: #fff; margin-bottom: 20px; text-align: center; line-height: 1.6; text-shadow: 0 0 15px rgba(255,255,255,0.2);}
+        .hero-center { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
+        .hero-center::before { content: ''; position: absolute; top: 50%; left: -80px; right: -80px; height: 2px; background: linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent); z-index: -1; transform: translateY(-50%); }
+        .tmpl-taiji-icon { font-size: 130px; color: #8e291c; line-height: 1; text-shadow: 0 0 50px rgba(142,41,28,0.8); filter: drop-shadow(0 0 25px rgba(212,175,55,0.4)); background: #05070a; border-radius: 50%; box-shadow: 0 0 40px #05070a; }
+
+        .tmpl-header { text-align: center; margin-bottom: 40px; width: 100%; }
+        .tmpl-title { font-family: "Noto Serif SC", serif; font-size: 68px; letter-spacing: 28px; margin: 0 0 15px 28px; color: #fff; text-shadow: 0 0 40px rgba(212,175,55,0.7); font-weight: bold;}
+        .tmpl-slogan { font-size: 22px; color: #d4af37; letter-spacing: 14px; font-family: sans-serif; text-transform: uppercase; margin-left: 14px;}
+
+        .tmpl-gua-info { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
+        .tmpl-gua-symbol { font-size: 80px; font-family: serif; color: #d4af37; line-height: 1; margin-bottom: 10px; text-shadow: 0 0 30px rgba(212,175,55,0.5);}
+        .tmpl-gua-name { font-size: 32px; font-weight: bold; color: #fff; margin-bottom: 5px; letter-spacing: 8px;}
+        .tmpl-yao-name { font-size: 20px; color: #d4af37; letter-spacing: 4px;}
+
+        .tmpl-content-section { width: 100%; display: flex; flex-direction: column; gap: 35px; margin-bottom: 50px; }
+        
+        .tmpl-section-card { border: 1px solid rgba(212,175,55,0.4); padding: 40px 35px 35px 35px; position: relative; background: linear-gradient(180deg, rgba(20,25,35,0.7) 0%, rgba(10,12,18,0.9) 100%); box-shadow: inset 0 0 30px rgba(0,0,0,0.6); }
+        .tmpl-label { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); background: #05070a; padding: 0 25px; font-size: 18px; color: #d4af37; letter-spacing: 6px; border: 1px solid rgba(212,175,55,0.6); border-radius: 30px;}
+        .tmpl-card-quote { font-size: 26px; font-weight: bold; color: #fff; margin-bottom: 20px; text-align: center; line-height: 1.6; text-shadow: 0 0 15px rgba(255,255,255,0.3);}
         .tmpl-card-desc { font-size: 20px; color: #a59c90; line-height: 1.8; text-align: justify; }
 
-        .tmpl-strategy-box { 
-            width: 100%; border: 2px solid #d4af37; padding: 55px 40px 40px 40px; position: relative; 
-            background: rgba(212,175,55,0.03); box-shadow: 0 0 40px rgba(212,175,55,0.05);
-        }
-        .tmpl-strat-label { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: #d4af37; color: #000; padding: 8px 30px; font-size: 22px; font-weight: bold; letter-spacing: 8px; border-radius: 4px; box-shadow: 0 0 20px rgba(212,175,55,0.4);}
+        .tmpl-strategy-box { width: 100%; border: 2px solid #d4af37; padding: 55px 40px 40px 40px; position: relative; background: rgba(212,175,55,0.05); box-shadow: 0 0 40px rgba(212,175,55,0.1); }
+        .tmpl-strat-label { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: #d4af37; color: #000; padding: 8px 30px; font-size: 22px; font-weight: bold; letter-spacing: 8px; border-radius: 4px; box-shadow: 0 0 20px rgba(212,175,55,0.5);}
         .tmpl-strat-content { font-size: 22px; color: #e6dfd3; line-height: 2.1; text-align: justify; }
         .tmpl-strat-content p { margin-bottom: 1.2em; }
         .tmpl-strat-content strong { color: #d4af37; font-weight: normal; border-bottom: 1px solid #d4af37; padding-bottom: 2px;}
 
-        /* V18 底部艺术区域：周文王 vs 机器人 (使用纯粹的高级SVG绘制) */
-        .tmpl-footer-art { 
-            width: 100%; display: flex; justify-content: space-between; align-items: flex-end; 
-            padding-top: 40px; position: relative;
-        }
-        .tmpl-footer-art::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(212,175,55,0.4), transparent); }
-        
-        .art-side { display: flex; flex-direction: column; align-items: center; width: 200px; opacity: 0.85; transition: opacity 0.3s;}
-        .art-icon { width: 85px; height: 85px; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(212,175,55,0.3));}
-        .art-text-main { font-size: 20px; color: #d4af37; letter-spacing: 6px; margin-bottom: 8px; font-weight: bold;}
-        .art-text-sub { font-size: 14px; color: #8c857a; letter-spacing: 3px;}
-
-        /* 中心二维码区域 */
-        .qr-center { display: flex; flex-direction: column; align-items: center; position: relative; top: -10px;}
-        .qr-frame { 
-            padding: 15px; border: 2px solid #d4af37; border-radius: 6px; background: #fff; 
-            position: relative; margin-bottom: 20px; box-shadow: 0 0 30px rgba(212,175,55,0.2);
-        }
+        /* 底部定向二维码 */
+        .tmpl-footer-qr { width: 100%; display: flex; flex-direction: column; align-items: center; border-top: 1px solid rgba(212,175,55,0.3); padding-top: 40px; }
+        .qr-frame { padding: 15px; border: 2px solid #d4af37; border-radius: 6px; background: #fff; position: relative; margin-bottom: 20px; box-shadow: 0 0 40px rgba(212,175,55,0.3); }
         .qr-frame::before, .qr-frame::after { content: ''; position: absolute; width: 25px; height: 25px; border-color: #d4af37; border-style: solid; }
-        .qr-frame::before { top: -10px; left: -10px; border-width: 3px 0 0 3px; }
-        .qr-frame::after { bottom: -10px; right: -10px; border-width: 0 3px 3px 0; }
-        .tmpl-qrcode-canvas { width: 160px !important; height: 160px !important; display: block;}
+        .qr-frame::before { top: -10px; left: -10px; border-width: 4px 0 0 4px; }
+        .qr-frame::after { bottom: -10px; right: -10px; border-width: 0 4px 4px 0; }
+        .tmpl-qrcode-canvas { width: 180px !important; height: 180px !important; display: block;}
         
-        .qr-center .qr-tip { font-size: 16px; color: #a59c90; margin: 0; letter-spacing: 4px; text-transform: uppercase; font-weight: bold;}
-        .qr-center .url-text { font-size: 14px; color: #d4af37; font-family: monospace; margin-top: 10px; letter-spacing: 2px; opacity: 0.9;}
+        .qr-tip { font-size: 18px; color: #a59c90; margin: 0 0 10px 0; letter-spacing: 6px; text-transform: uppercase; font-weight: bold;}
+        .url-text { font-size: 16px; color: #d4af37; font-family: monospace; letter-spacing: 2px; opacity: 0.9;}
 
         #image-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; animation: fadeInModal 0.4s forwards; }
         @keyframes fadeInModal { to { opacity: 1; } }
@@ -184,18 +157,44 @@
 <div id="share-card-template">
     <div class="texture-overlay"></div>
     <div class="tmpl-content-wrapper">
+        
+        <div class="tmpl-hero-banner">
+            <div class="hero-side">
+                <svg class="hero-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="46" stroke="#d4af37" stroke-width="2" stroke-dasharray="6 4" opacity="0.9"/>
+                    <rect x="28" y="25" width="8" height="50" rx="2" stroke="#d4af37" stroke-width="2" fill="rgba(212,175,55,0.1)"/>
+                    <rect x="46" y="18" width="8" height="64" rx="2" stroke="#d4af37" stroke-width="2" fill="rgba(212,175,55,0.3)"/>
+                    <rect x="64" y="25" width="8" height="50" rx="2" stroke="#d4af37" stroke-width="2" fill="rgba(212,175,55,0.1)"/>
+                    <path d="M 20 40 L 80 40 M 20 60 L 80 60" stroke="#d4af37" stroke-width="1.5" opacity="0.8"/>
+                </svg>
+                <div style="font-size:18px; color:#d4af37; font-weight:bold; letter-spacing:4px;">易经原典</div>
+            </div>
+            
+            <div class="hero-center">
+                <div class="tmpl-taiji-icon">☯</div>
+            </div>
+
+            <div class="hero-side">
+                <svg class="hero-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 50 6 L 90 28 L 90 72 L 50 94 L 10 72 L 10 28 Z" stroke="#d4af37" stroke-width="2" fill="rgba(212,175,55,0.05)"/>
+                    <circle cx="50" cy="50" r="26" stroke="#d4af37" stroke-width="2" stroke-dasharray="2 6"/>
+                    <path d="M 50 24 L 50 6 M 76 50 L 90 50 M 50 76 L 50 94 M 24 50 L 10 50" stroke="#d4af37" stroke-width="2" opacity="0.9"/>
+                    <circle cx="50" cy="50" r="8" fill="#d4af37"/>
+                    <circle cx="50" cy="50" r="3" fill="#fff"/>
+                </svg>
+                <div style="font-size:18px; color:#d4af37; font-weight:bold; letter-spacing:4px;">高能算力</div>
+            </div>
+        </div>
+
         <div class="tmpl-header">
             <h2 class="tmpl-title">易鼎战略</h2>
             <div class="tmpl-slogan">一窥天演，智定鼎局。</div>
         </div>
         
-        <div class="tmpl-gua-wrap">
-            <div class="tmpl-taiji-icon">☯</div>
-            <div class="tmpl-gua-info">
-                <div class="tmpl-gua-symbol" id="tmpl-gua-symbol">䷀</div>
-                <div class="tmpl-gua-name" id="tmpl-gua-name">乾为天</div>
-                <div class="tmpl-yao-name" id="tmpl-yao-name">爻位：初九</div>
-            </div>
+        <div class="tmpl-gua-info">
+            <div class="tmpl-gua-symbol" id="tmpl-gua-symbol">䷀</div>
+            <div class="tmpl-gua-name" id="tmpl-gua-name">乾为天</div>
+            <div class="tmpl-yao-name" id="tmpl-yao-name">爻位：初九</div>
         </div>
 
         <div class="tmpl-content-section">
@@ -215,40 +214,12 @@
             </div>
         </div>
 
-        <div class="tmpl-footer-art">
-            <div class="art-side">
-                <svg class="art-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="46" stroke="#d4af37" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.8"/>
-                    <rect x="28" y="25" width="8" height="50" rx="2" stroke="#d4af37" stroke-width="1.5" fill="rgba(212,175,55,0.1)"/>
-                    <rect x="46" y="18" width="8" height="64" rx="2" stroke="#d4af37" stroke-width="1.5" fill="rgba(212,175,55,0.2)"/>
-                    <rect x="64" y="25" width="8" height="50" rx="2" stroke="#d4af37" stroke-width="1.5" fill="rgba(212,175,55,0.1)"/>
-                    <path d="M 20 40 L 80 40 M 20 60 L 80 60" stroke="#d4af37" stroke-width="1" opacity="0.7"/>
-                    <circle cx="50" cy="50" r="6" fill="#8e291c" />
-                </svg>
-                <div class="art-text-main">周文王</div>
-                <div class="art-text-sub">先秦古智·观象</div>
+        <div class="tmpl-footer-qr">
+            <div class="qr-frame">
+                <canvas id="tmpl-qrcode-canvas" class="tmpl-qrcode-canvas"></canvas>
             </div>
-
-            <div class="qr-center">
-                <div class="qr-frame">
-                    <canvas id="tmpl-qrcode-canvas" class="tmpl-qrcode-canvas"></canvas>
-                </div>
-                <div class="qr-tip">扫码入局 · 一定胜局</div>
-                <div class="url-text">www.yishu-strategy.com</div>
-            </div>
-
-            <div class="art-side">
-                <svg class="art-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 50 6 L 90 28 L 90 72 L 50 94 L 10 72 L 10 28 Z" stroke="#d4af37" stroke-width="1.5" fill="rgba(212,175,55,0.05)"/>
-                    <circle cx="50" cy="50" r="26" stroke="#d4af37" stroke-width="1.5" stroke-dasharray="2 6"/>
-                    <path d="M 50 24 L 50 6 M 76 50 L 90 50 M 50 76 L 50 94 M 24 50 L 10 50" stroke="#d4af37" stroke-width="1.5" opacity="0.8"/>
-                    <path d="M 68 32 L 82 18 M 68 68 L 82 82 M 32 68 L 18 82 M 32 32 L 18 18" stroke="#d4af37" stroke-width="1" opacity="0.5"/>
-                    <circle cx="50" cy="50" r="8" fill="#d4af37"/>
-                    <circle cx="50" cy="50" r="3" fill="#fff"/>
-                </svg>
-                <div class="art-text-main">硅基引擎</div>
-                <div class="art-text-sub">高维算力·推演</div>
-            </div>
+            <div class="qr-tip">扫码入局 · 一定胜局</div>
+            <div class="url-text">www.yishu-strategy.com</div>
         </div>
     </div>
 </div>
@@ -298,7 +269,7 @@
 
 <div class="share-control" id="share-control">
     <div class="share-control-inner">
-        <button class="btn" id="share-btn" onclick="generateShareImage()">生成史诗级全要素分享图</button>
+        <button class="btn" id="share-btn" onclick="generateShareImage()">生成史诗级融合海报 (带二维码)</button>
     </div>
 </div>
 
@@ -459,7 +430,7 @@
         const qrcodeCanvas = document.getElementById('tmpl-qrcode-canvas');
         try {
             await QRCode.toCanvas(qrcodeCanvas, 'https://www.yishu-strategy.com/', {
-                width: 160, margin: 0, color: { dark: '#000000', light: '#ffffff' } 
+                width: 180, margin: 0, color: { dark: '#000000', light: '#ffffff' } 
             });
         } catch (err) { console.error("QR Error", err); }
 
@@ -476,7 +447,7 @@
             console.error(e); alert("星图绘制中断，云端矩阵故障");
         } finally {
             template.style.display = 'none'; 
-            shareBtn.innerText = "生成史诗级全要素分享图"; shareBtn.disabled = false;
+            shareBtn.innerText = "生成史诗级融合海报 (带二维码)"; shareBtn.disabled = false;
         }
     }
     function closeModal() { document.getElementById('image-modal').style.display = 'none'; }
