@@ -13,7 +13,7 @@
             --red: #8e291c;
             --glass-bg: rgba(15, 20, 25, 0.85); --glass-border: rgba(212, 175, 55, 0.3);
         }
-        
+
         body, html {
             margin: 0; padding: 0; width: 100%; min-height: 100vh;
             background-color: var(--bg-dark); font-family: "Noto Serif SC", STSong, "Source Han Serif SC", serif;
@@ -37,7 +37,7 @@
             border: 1px solid var(--glass-border); border-radius: 4px; padding: 40px 30px; box-sizing: border-box;
             box-shadow: 0 30px 60px rgba(0,0,0,0.8); margin-bottom: 40px;
         }
-        
+
         .input-box {
             width: 100%; padding: 18px 0; border: none; border-bottom: 1px solid rgba(212, 175, 55, 0.4);
             background: transparent; font-size: 18px; font-family: inherit; text-align: center; color: #fff; outline: none; margin-bottom: 40px; transition: 0.4s;
@@ -54,7 +54,7 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .gua-display { text-align: center; margin-bottom: 40px; }
-        .gua-symbol { font-size: 120px; line-height: 1; color: var(--gold); margin-bottom: 10px; text-shadow: 0 0 40px var(--gold-glow); }
+        .gua-symbol { font-size: 130px; line-height: 1; color: var(--gold); margin-bottom: 10px; text-shadow: 0 0 40px var(--gold-glow); }
         .gua-name { font-size: 32px; color: #fff; letter-spacing: 10px; margin-bottom: 10px; font-weight: bold; }
         .gua-details { font-size: 16px; color: var(--gold); letter-spacing: 4px; }
 
@@ -67,34 +67,34 @@
 
         .share-control { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(5, 7, 10, 0.95); border-top: 1px solid var(--glass-border); padding: 25px; box-sizing: border-box; z-index: 100; display: none; justify-content: center; backdrop-filter: blur(10px); }
 
-        /* 海报模板 - 高度自适应 */
+        /* 海报模板 */
         #share-card-template {
-            position: absolute; left: -9999px; top: -9999px; 
-            width: 850px; background: #05070a; color: #d1c5b4; 
+            position: absolute; left: -9999px; top: -9999px;
+            width: 850px; background: #05070a; color: #d1c5b4;
             display: none; flex-direction: column; align-items: center; height: auto; padding-bottom: 40px;
         }
-        
+
         .poster-hero { width: 100%; height: auto; display: block; }
         .poster-hero-wrap { position: relative; width: 100%; }
         .poster-floating-gua {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 200px; color: rgba(212, 175, 55, 0.15);
-            text-shadow: 0 0 50px rgba(212, 175, 55, 0.4); pointer-events: none;
+            font-size: 240px; color: rgba(212, 175, 55, 0.12);
+            text-shadow: 0 0 60px rgba(212, 175, 55, 0.4); pointer-events: none;
         }
 
         .poster-body { padding: 40px 70px; width: 100%; box-sizing: border-box; }
         .poster-header { text-align: center; margin-bottom: 40px; }
         .poster-title { font-size: 64px; letter-spacing: 32px; color: #fff; font-weight: bold; text-shadow: 0 0 40px rgba(212,175,55,0.5); margin-left: 32px;}
-        
+
         .poster-gua-row { display: flex; align-items: center; justify-content: center; gap: 30px; margin-bottom: 40px; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 30px;}
-        .p-gua-symbol { font-size: 100px; color: var(--gold); line-height: 1; }
+        .p-gua-symbol { font-size: 110px; color: var(--gold); line-height: 1; }
         .p-gua-info { text-align: left; }
         .p-gua-name { font-size: 40px; color: #fff; font-weight: bold; letter-spacing: 12px; margin-bottom: 10px;}
         .p-gua-yao { font-size: 20px; color: var(--gold); letter-spacing: 6px; }
 
-        .poster-box { width: 100%; border: 1px solid rgba(212,175,55,0.25); padding: 35px; margin-bottom: 30px; background: rgba(20,25,35,0.4); }
+        .poster-box { width: 100%; border: 1px solid rgba(212, 175, 55, 0.25); padding: 35px; margin-bottom: 30px; background: rgba(20,25,35,0.4); }
         .poster-box-label { font-size: 20px; color: var(--gold); margin-bottom: 20px; font-weight: bold; border-left: 4px solid var(--gold); padding-left: 15px;}
-        .poster-text-main { font-size: 20px; color: #e6dfd3; line-height: 1.9; text-align: justify; }
+        .poster-text-main { font-size: 20px; color: #e6dfd3; line-height: 2.0; text-align: justify; }
         .poster-text-main strong { color: var(--gold); font-weight: normal; }
 
         .poster-footer { width: 100%; display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px; padding-top: 40px; border-top: 2px solid var(--gold); }
@@ -102,13 +102,13 @@
         .f-slogan-big { font-size: 28px; color: #fff; letter-spacing: 6px; font-weight: bold; margin-bottom: 10px; }
         .f-slogan-sub { font-size: 18px; color: var(--text-dim); margin-bottom: 15px; }
         .f-url { font-size: 18px; color: var(--gold); font-family: monospace; }
-        
+
         .qr-container { padding: 15px; background: #fff; border-radius: 4px; box-shadow: 0 0 30px rgba(212,175,55,0.4); }
-        .qr-canvas { width: 140px !important; height: 140px !important; display: block; }
+        .qr-canvas { width: 160px !important; height: 160px !important; display: block; }
 
         #image-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; display: none; justify-content: center; align-items: center; }
         .modal-wrap { max-width: 90%; max-height: 95%; display: flex; flex-direction: column; align-items: center; position: relative; }
-        #final-share-image { max-width: 100%; max-height: 85vh; border: 1px solid var(--gold); box-shadow: 0 0 50px rgba(0,0,0,1); overflow-y: auto;}
+        #final-share-image { max-width: 100%; max-height: 85vh; border: 1px solid var(--gold); box-shadow: 0 0 50px rgba(0,0,0,1); }
         .modal-close { position: absolute; top: -50px; right: 0; color: #fff; background: none; border: 1px solid #fff; padding: 8px 20px; cursor: pointer; border-radius: 4px; }
     </style>
 </head>
@@ -121,7 +121,7 @@
         <img id="poster-hero-img" src="" class="poster-hero" crossorigin="anonymous">
         <div class="poster-floating-gua" id="poster-floating-gua">䷀</div>
     </div>
-    
+
     <div class="poster-body">
         <div class="poster-header">
             <div class="poster-title">易鼎戰略</div>
@@ -140,7 +140,7 @@
             <div class="poster-text-main" id="tmpl-yuan-dian"></div>
         </div>
         <div class="poster-box">
-            <div class="poster-box-label">多维解读</div>
+            <div class="poster-box-label">模型解构</div>
             <div class="poster-text-main" id="tmpl-duo-wei"></div>
         </div>
         <div class="poster-box">
@@ -155,7 +155,7 @@
         <div class="poster-footer">
             <div class="f-left">
                 <div class="f-slogan-big">一窥天演，智定鼎局。</div>
-                <div class="f-slogan-sub">链接高维智慧 · 掌控绝对变局</div>
+                <div class="f-slogan-sub">链接高维模型 · 掌控绝对变局</div>
                 <div class="f-url">www.yishu-strategy.com</div>
             </div>
             <div class="qr-container">
@@ -178,12 +178,12 @@
         <h1>易鼎战略</h1>
         <div class="stamp">YIDING STRATEGY · 东方战略智库</div>
     </div>
-    
+
     <div class="control-panel">
         <input type="text" id="user-question" class="input-box" placeholder="写下您当下面临的困局或抉择..." autocomplete="off">
         <button class="btn" id="submit-btn" onclick="castAndAnalyze()">凝神起卦</button>
     </div>
-    
+
     <div id="status-box" class="status-box"></div>
 
     <div id="result-panel" class="result-panel">
@@ -192,17 +192,17 @@
             <div class="gua-name" id="hex-title"></div>
             <div class="gua-details" id="hex-line"></div>
         </div>
-        
+
         <div class="card">
-            <div class="card-title">一、 原典象意</div>
+            <div class="card-title">一、 原典象意 (译注与解析)</div>
             <div class="card-content" id="res-yuan-dian"></div>
         </div>
         <div class="card">
-            <div class="card-title">二、 多维解读</div>
+            <div class="card-title">二、 模型解构 (事功/心性/关系/时机)</div>
             <div class="card-content" id="res-duo-wei"></div>
         </div>
         <div class="card">
-            <div class="card-title">三、 行动建议</div>
+            <div class="card-title">三、 行动建议 (策略与预案)</div>
             <div class="card-content" id="res-xing-dong"></div>
         </div>
         <div class="card" style="border-width: 2px; border-color: var(--gold);">
@@ -213,18 +213,18 @@
 </div>
 
 <div class="share-control" id="share-control">
-    <button class="btn" onclick="generateShareImage()">熔铸多维透析海报</button>
+    <button class="btn" onclick="generateShareImage()">生成乾坤透析长海报</button>
 </div>
 
 <script>
-    // 粒子效果
+    // 粒子连线效果
     const canvas = document.getElementById('canvas-bg');
     const ctx = canvas.getContext('2d');
     let width, height, dots;
     function initCanvas() {
         width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; dots = [];
-        for (let i = 0; i < 60; i++) {
-            dots.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.15, vy: (Math.random() - 0.5) * 0.15, r: Math.random() * 2 });
+        for (let i = 0; i < 70; i++) {
+            dots.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.12, vy: (Math.random() - 0.5) * 0.12, r: Math.random() * 2 });
         }
     }
     function draw() {
@@ -244,7 +244,7 @@
 
     const hexagrams = ["乾为天", "坤为地", "水雷屯", "山水蒙", "水天需", "天水讼", "地水师", "水地比", "风天小畜", "天泽履", "地天泰", "天地否", "天火同人", "火天大有", "地山谦", "雷地豫", "泽雷随", "山风蛊", "地泽临", "风地观", "火雷噬嗑", "山火贲", "山地剥", "地雷复", "天雷无妄", "山天大畜", "山雷颐", "泽风大过", "坎为水", "离为火", "泽山咸", "雷风恒", "天山遁", "雷天大壮", "火地晋", "地火明夷", "风火家人", "火泽睽", "水山蹇", "雷水解", "山泽损", "风雷益", "泽天夬", "天风姤", "泽地萃", "地风升", "泽水困", "水风井", "泽火革", "火风鼎", "震为雷", "艮为山", "风山渐", "雷泽归妹", "雷火丰", "火山旅", "巽为风", "兑为泽", "风水涣", "水泽节", "风泽中孚", "雷山小过", "水火既济", "火水未济"];
     const hexagramBinaries = ["111111", "000000", "100010", "010001", "111010", "010111", "010000", "000010", "111011", "110111", "111000", "000111", "101111", "111101", "001000", "000100", "100110", "011001", "110000", "000011", "100101", "101001", "000001", "100000", "100111", "111001", "100001", "011110", "010010", "101101", "001110", "011100", "001111", "111100", "000101", "101000", "101011", "110101", "001010", "010100", "110001", "100011", "111110", "011111", "000110", "011000", "010110", "011010", "101110", "011101", "100100", "001001", "001011", "110100", "101100", "001101", "011011", "110110", "010011", "110010", "110011", "001100", "101010", "010101"];
-    
+
     function getLineName(binaryStr, lineNumber) {
         const isYang = binaryStr[lineNumber - 1] === '1';
         const yangNames = ["初九", "九二", "九三", "九四", "九五", "上九"];
@@ -253,8 +253,7 @@
     }
 
     function parseAIResponse(text) {
-        // 更新解析标签，精确抓取四大部分
-        const sections = { yuan_dian: "【原典启示】", duo_wei: "【多维解读】", xing_dong: "【行动建议】", zhe_si: "【深层哲思】" };
+        const sections = { yuan_dian: "【原典象意】", duo_wei: "【模型解构】", xing_dong: "【行动建议】", zhe_si: "【深层哲思】" };
         let parsed = {}; let keys = Object.keys(sections);
         for(let i=0; i<keys.length; i++) {
             let key = keys[i]; let startTag = sections[key]; let nextTag = i < keys.length - 1 ? sections[keys[i+1]] : null;
@@ -263,9 +262,8 @@
             startIndex += startTag.length;
             let endIndex = nextTag ? text.indexOf(nextTag, startIndex) : text.length;
             if (endIndex === -1) endIndex = text.length;
-            
+
             let content = text.substring(startIndex, endIndex).trim();
-            // 将 Markdown 的 **加粗** 转换为 HTML 的 <strong>，将换行转换为 <br>
             content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             content = content.replace(/\n/g, '<br>');
             parsed[key] = content;
@@ -279,11 +277,11 @@
         const question = document.getElementById('user-question').value;
         if (!question.trim()) { alert("请写下您的困局。"); return; }
         const btn = document.getElementById('submit-btn');
-        btn.innerText = "多维透析中..."; btn.disabled = true;
+        btn.innerText = "高维透析中..."; btn.disabled = true;
         document.getElementById('status-box').style.display = 'block';
-        document.getElementById('status-box').innerText = "正在链接易理，生成全维度战略分析与哲学内观...";
+        document.getElementById('status-box').innerText = "启动女娲蒸馏引擎，正在用顶级思维模型解构易理象数...";
 
-        const index = Math.floor(Math.random() * 64); const name = hexagrams[index]; const line = Math.floor(Math.random() * 6) + 1; 
+        const index = Math.floor(Math.random() * 64); const name = hexagrams[index]; const line = Math.floor(Math.random() * 6) + 1;
         const symbol = String.fromCodePoint(0x4DC0 + index); const exactLineName = getLineName(hexagramBinaries[index], line);
 
         try {
@@ -292,35 +290,33 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     messages: [
-                        { 
-                            role: "system", 
-                            content: `你是一位深谙《周易》底层逻辑的顶尖东方战略智囊。
-解读原则：回归《周易》“时、位、势、变”核心哲理。将古老的卦辞爻辞，化作极其锐利、透彻、结构化的现代决策指南。语气深邃、客观、直击灵魂。
+                        {
+                            role: "system",
+                            content: `你是一个融合了《周易》底层逻辑与「女娲.skill」思维蒸馏框架的超级智囊。
+你的任务是：用《易经》的象理作为诊断工具，用顶尖思想家（如Naval、马斯克、乔布斯、芒格等）的底层模型作为手术刀，解构现实困境。
 
 请严格按照以下4个【】大标题输出，不需要前言后语，直接进入正文：
 
-【原典启示】
-- 辞意译注：列出本卦卦辞与本爻爻辞原文，并给出精准、达雅的现代汉语翻译。
-- 象理剖析：深入剖析本卦与本爻的象征意义（结合上下卦的自然意象，如水火交融、山风互逆等）以及动态意象（如当前爻位在全卦中的发展阶段与运动趋势）。
+【原典象意】
+- 辞意译注：列出本卦卦辞与本爻爻辞原文，给出精准、达雅的现代翻译。
+- 象理剖析：深入剖析本卦与本爻的象征意义（结合自然意象）以及动态意象（爻位在全卦中的发展阶段）。
 
-【多维解读】
-结合用户的问题，分层次解析：
-- 事功层面：事业、决策、合作的具体启示。
-- 心性层面：内心状态、欲望、恐惧的映照。
-- 关系层面：与上下级、伴侣、团队的互动模式。
-- 时机层面：当前处于何种发展阶段。
+【模型解构】
+调用顶尖思维模型“翻译”当前卦象。
+- 必须包含：事功（事业/决策）、心性（心态/欲望）、关系（互动模式）、时机（当前阶段）。
+- 语言风格：锐利、拒绝和泥。例如化用Naval的杠杆、马斯克的第一性原理、乔布斯的聚焦等。
 
 【行动建议】
-- 吉凶机变：趋避、进退之机。
-- 实操建议：给出3条具体、极其可操作的建议（严禁空洞的“要真诚”之类）。
-- 变数应对：指出可能的变数与防范预案。
+- 吉凶机变：具体的趋避、进退信号。
+- 3条极其具体、可操作的硬核指南。
+- 可能变数：防范预案。
 
 【深层哲思】
-- 内观发问：提出2-3个发人深省的反思问题，引导提问者内观。
-- 核心教诲：一句话点出本爻最本质的生命课题。
-- 结语提示：说明《易经》是“镜子”而非“答案”，鼓励结合自身情境体悟，并欢迎提供更多背景以便深入。
+- 提出2-3个反思问题（如：“你在玩谁的游戏？”）。
+- 一句话点出本爻本质生命课题。
+- 结语：说明易经是“镜子”而非“答案”，鼓励内观体悟。
 
-提示：你可以使用小标题，重点词汇请使用**加粗**（Markdown格式）。`
+重点词汇请使用**加粗**。`
                         },
                         { role: "user", content: `抽中卦象：${name}卦，爻位：${exactLineName}。问题：${question}` }
                     ]
@@ -331,14 +327,14 @@
             const result = parseAIResponse(data.choices[0].message.content);
             currentGuaData = { symbol, name, exactLineName, ...result };
 
-            document.getElementById('hex-symbol').innerText = symbol; 
-            document.getElementById('hex-title').innerText = name; 
+            document.getElementById('hex-symbol').innerText = symbol;
+            document.getElementById('hex-title').innerText = name;
             document.getElementById('hex-line').innerText = `爻位：${exactLineName}`;
-            
-            document.getElementById('res-yuan-dian').innerHTML = result.yuan_dian; 
-            document.getElementById('res-duo-wei').innerHTML = result.duo_wei; 
-            document.getElementById('res-xing-dong').innerHTML = result.xing_dong; 
-            document.getElementById('res-zhe-si').innerHTML = result.zhe_si; 
+
+            document.getElementById('res-yuan-dian').innerHTML = result.yuan_dian;
+            document.getElementById('res-duo-wei').innerHTML = result.duo_wei;
+            document.getElementById('res-xing-dong').innerHTML = result.xing_dong;
+            document.getElementById('res-zhe-si').innerHTML = result.zhe_si;
 
             document.getElementById('status-box').style.display = 'none';
             document.getElementById('result-panel').style.display = 'block';
@@ -346,7 +342,7 @@
             document.getElementById('result-panel').scrollIntoView({ behavior: 'smooth' });
 
         } catch (e) {
-            alert("易理推演暂时受阻，请重新起卦。");
+            alert("易理透析暂时受阻，请重新起卦。");
         } finally {
             btn.innerText = "凝神起卦"; btn.disabled = false;
         }
@@ -362,35 +358,34 @@
         document.getElementById('p-gua-symbol').innerText = currentGuaData.symbol;
         document.getElementById('p-gua-name').innerText = currentGuaData.name;
         document.getElementById('p-gua-yao').innerText = `爻位：${currentGuaData.exactLineName}`;
-        
+
         document.getElementById('tmpl-yuan-dian').innerHTML = currentGuaData.yuan_dian;
         document.getElementById('tmpl-duo-wei').innerHTML = currentGuaData.duo_wei;
         document.getElementById('tmpl-xing-dong').innerHTML = currentGuaData.xing_dong;
         document.getElementById('tmpl-zhe-si').innerHTML = currentGuaData.zhe_si;
 
         try {
-            await QRCode.toCanvas(document.getElementById('tmpl-qrcode-canvas'), 'https://www.yishu-strategy.com/', { width: 140, margin: 1 });
+            await QRCode.toCanvas(document.getElementById('tmpl-qrcode-canvas'), 'https://www.yishu-strategy.com/', { width: 160, margin: 1 });
         } catch (err) {}
 
         const template = document.getElementById('share-card-template');
-        template.style.display = 'flex'; 
+        template.style.display = 'flex';
 
         try {
-            await new Promise(r => setTimeout(r, 600));
-            // 增加 windowHeight 参数解决截图截不断或者过长的问题
-            const canvas = await html2canvas(template, { 
-                scale: 2, 
-                useCORS: true, 
+            await new Promise(r => setTimeout(r, 800));
+            const canvas = await html2canvas(template, {
+                scale: 2,
+                useCORS: true,
                 backgroundColor: '#05070a',
                 windowHeight: template.scrollHeight
             });
             document.getElementById('final-share-image').src = canvas.toDataURL('image/png');
             document.getElementById('image-modal').style.display = 'flex';
         } catch (e) {
-            alert("生成失败，请检查 hero-bg.jpg。");
+            alert("生成失败，请确认 hero-bg.jpg。");
         } finally {
-            template.style.display = 'none'; 
-            btn.innerText = "熔铸多维透析海报"; btn.disabled = false;
+            template.style.display = 'none';
+            btn.innerText = "生成乾坤透析长海报"; btn.disabled = false;
         }
     }
     function closeModal() { document.getElementById('image-modal').style.display = 'none'; }
